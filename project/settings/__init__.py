@@ -32,6 +32,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # APPS
+    'users',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -44,7 +48,11 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+
 ROOT_URLCONF = 'project.urls'
+
+AUTH_USER_MODEL = 'users.User'
+
 
 TEMPLATES = [
     {
@@ -96,3 +104,8 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+
+
+# User Redirect
+LOGIN_URL = "/login"
+LOGIN_REDIRECT_URL = 'dashboard'

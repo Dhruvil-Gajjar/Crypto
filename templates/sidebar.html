@@ -1,0 +1,82 @@
+{% load static %}
+
+<!-- Main Sidebar Container -->
+<aside class="main-sidebar sidebar-dark-primary elevation-4">
+    <!-- Brand Logo -->
+    <a href="{% url 'dashboard' %}" class="brand-link">
+        <img src="{% static 'img/AdminLTELogo.png' %}" alt="AdminLTE Logo" class="brand-image img-circle elevation-3"
+             style="opacity: .8">
+        <span class="brand-text font-weight-light">Arrow</span>
+    </a>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <!-- Sidebar user panel (optional) -->
+        <div class="user-panel mt-3 pb-3 mb-3 d-flex">
+            <div class="image">
+                <img src="{% static 'img/user1-128x128.jpg' %}" class="img-circle elevation-2" alt="User Image">
+            </div>
+            {% if request.user.is_authenticated %}
+                <div class="info">
+                    <a href="{% url 'update_profile' request.user.pk %}" class="d-block">
+                        {{ request.user.first_name }} {{ request.user.last_name }}
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
+        <!-- Sidebar Menu -->
+        <nav class="mt-2">
+
+            <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
+                data-accordion="false">
+
+                <li class="nav-item">
+                    <a href="{% url 'dashboard' %}" class="nav-link
+                             {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+
+                        <i class="nav-icon fas fa-tachometer-alt"></i>
+                        <p>
+                            Dashboard
+                        </p>
+                    </a>
+                </li>
+
+                {% if user.is_superuser %}
+                    <li class="nav-item {% if request.resolver_match.url_name == 'list_users' or request.resolver_match.url_name == 'add_user' %}menu-open{% endif %}">
+                        <a class="nav-link">
+                            <i class="fas fa-users nav-icon"></i>
+                            <p>
+                                Users
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{% url 'add_user' %}"
+                                   class="nav-link {% if request.resolver_match.url_name == 'add_user' %}active{% endif %}">
+
+                                    <i class="fas fa-user-plus nav-icon"></i>
+                                    <p>Add</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{% url 'list_users' %}"
+                                   class="nav-link {% if request.resolver_match.url_name == 'list_users' %}active{% endif %}">
+
+                                    <i class="fas fa-list-ul nav-icon"></i>
+                                    <p>List</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                {% endif %}
+
+            </ul>
+        </nav>
+        <!-- /.sidebar-menu -->
+    </div>
+    <!-- /.sidebar -->
+</aside>
