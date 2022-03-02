@@ -1,101 +1,66 @@
 {% extends 'main.html' %}
-
-{% block page_title %}
-    LogIn
-{% endblock %}
-
-{% block extra_css %}
-
-{% endblock %}
+{% load static %}
 
 {% block body %}
 
-    <body class="hold-transition login-page">
-        <div class="login-box">
-            <!-- /.login-logo -->
-            <div class="card card-outline card-primary">
-                <div class="card-header text-center">
-                    <a href="" class="h2"><b>Crypto</b> </a>
-                </div>
-                <div class="card-body">
-                    <p class="login-box-msg">Sign in to start your session</p>
+<body>
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="margin: 50px 0;">
+            <div class="col-lg-8 col-md-12 col-sm-12 col-12">
 
-                    <form method="post">
-                        {% csrf_token %}
-                        <div class="input-group mb-3 {% if form.username.errors %}has-error{% else %}has-feedback{% endif %}">
-                            <input type="text" class="form-control" placeholder="Email" id="id_username" name="username"
+                <div class="AppForm shadow-lg">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div style="background-image: url('{% static "img/signup.jpg" %}')"; class="AppFormRight position-relative d-flex justify-content-center flex-column align-items-center text-center p-5 text-white">
+                                <h2 class="position-relative px-4 pb-3 mb-4">Welcome</h2>
+                                <p>Lorem ipsuing elit. Molomos totam est voluptatum i omos totam est voluptatum i ure sit consectetur ill</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 d-flex justify-content-center align-items-center">
+                            <div class="AppFormLeft">
+                                <h1 style="color: #1a3067; font-weight: bolder;">Sign In</h1>
+                                <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group position-relative mb-3">
+                                     <input type="text" class="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none" placeholder="Email" id="id_username" name="username"
                                    required="required" autofocus="autofocus">
-                            {% if form.username.errors %}
-                                <ul class="help-block list-unstyled">
-                                    {% for error in form.username.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-envelope"></span>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="input-group mb-3 {% if form.password.errors %}has-error{% else %}has-feedback{% endif %}">
-                            <input type="password" class="form-control" placeholder="Password" id="id_password"
+                                <ul class="help-block text-danger list-unstyled mb-0">
+                                    <li>{{ form.username.errors }}</li>
+                                </ul>
+                                <div class="form-group position-relative mb-3">
+                                     <input type="password" class="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none" placeholder="Password" id="id_password"
                                    name="password" required="required">
-                            {% if form.password.errors %}
-                                <ul class="help-block list-unstyled">
-                                    {% for error in form.password.errors %}
-                                        <li>{{ error }}</li>
-                                    {% endfor %}
-                                </ul>
-                            {% endif %}
-                            <div class="input-group-append">
-                                <div class="input-group-text">
-                                    <span class="fas fa-lock"></span>
                                 </div>
+                                <ul class="help-block text-danger list-unstyled mb-0">
+                                    <li>{{ form.password.errors }}</li>
+                                </ul>
+
+                                <button type="submit" class="btn btn-success btn-block shadow border-0 py-2 text-uppercase">Sign In</button>
+                                  </form>
+                                <p class="text-center mt-3" style="font-size:15px;">
+                                    Don't have an account?
+                                    <span>
+                                        <a href="{% url 'user_signup' %}">Sign Up</a>
+                                    </span>
+                                </p>
                             </div>
                         </div>
-
-                        {% if form.non_field_errors %}
-                            <ul class="text-danger form-group" style="list-style-type:none;padding-left: 0">
-                                {% for error in form.non_field_errors %}
-                                    <li>{{ error }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-
-                        <div class="row">
-                            <div class="col-8">
-
-                            </div>
-                            <!-- /.col -->
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-primary btn-block">Sign In</button>
-                            </div>
-                            <!-- /.col -->
-                        </div>
-                    </form>
-
-                    <div class="social-auth-links text-center">
-                        <p>- New User? -</p>
-                        <a href="{% url 'user_signup' %}" class="btn btn-block btn-primary">
-                            <i class="fas fa-sign-in-alt mr-2"></i>
-                            Sign Up
-                        </a>
                     </div>
                 </div>
-                <!-- /.card-body -->
-            </div>
-            <!-- /.card -->
         </div>
-        <!-- /.login-box -->
-    </body>
+    </div>
+</body>
+
 
 {% endblock %}
 
+
 {% block extra_js %}
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
+
         });
     </script>
 {% endblock %}

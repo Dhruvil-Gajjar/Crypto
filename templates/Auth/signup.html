@@ -1,124 +1,79 @@
 {% extends 'main.html' %}
-
+{% load static %}
 
 {% block body %}
 
-    <body class="hold-transition register-page">
-        <div class="register-box">
-            <div class="register-logo">
-                <a><b>Crypto</b> </a>
-            </div>
+<body>
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="margin: 50px 0;">
+            <div class="col-lg-8 col-md-12 col-sm-12 col-12">
 
-            <div class="card">
-                <div class="card-body register-card-body">
-                    <p class="login-box-msg">Sign-Up</p>
+                <div class="AppForm shadow-lg">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div  style="background-image: url('{% static "img/signup.jpg" %}')"; class="AppFormRight position-relative d-flex justify-content-center flex-column align-items-center text-center p-5 text-white">
+                                <h2 class="position-relative px-4 pb-3 mb-4">Welcome</h2>
+                                <p>Lorem ipsuing elit. Molomos totam est voluptatum i omos totam est voluptatum i ure sit consectetur ill</p>
+                            </div>
+                        </div>
 
-                    <form method="post">
-                        {% csrf_token %}
-
-                        <div class="mb-3">
-                            <div class="input-group">
-                                {{ form.first_name }}
-
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-user"></span>
-                                    </div>
+                        <div class="col-md-6 d-flex justify-content-center align-items-center">
+                            <div class="AppFormLeft">
+                                <h1 style="color: #1a3067; font-weight: bolder;">Sign Up</h1>
+                                <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group position-relative mb-3">
+<!--                                    <input type="text" class="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none" id="username" placeholder="Username" />-->
+                                        {{ form.first_name }}
                                 </div>
-                            </div>
-
-                            <ul class="help-block text-danger list-unstyled mb-0">
-                                <li>{{ form.first_name.errors }}</li>
-                            </ul>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="input-group">
-                                {{ form.last_name }}
-
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-user"></span>
-                                    </div>
+                                 <ul class="help-block text-danger list-unstyled mb-0">
+                                    <li>{{ form.first_name.errors }}</li>
+                                </ul>
+                                <div class="form-group position-relative mb-3">
+<!--                                    <input type="password" class="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none" id="password" placeholder="Password" />-->
+                                     {{ form.last_name }}
                                 </div>
-                            </div>
-
-                            <ul class="help-block text-danger list-unstyled mb-0">
-                                <li>{{ form.last_name.errors }}</li>
-                            </ul>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="input-group">
-                                {{ form.email }}
-
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-envelope"></span>
-                                    </div>
+                                <ul class="help-block text-danger list-unstyled mb-0">
+                                    <li>{{ form.last_name.errors }}</li>
+                                </ul>
+                                <div class="form-group position-relative mb-3">
+<!--                                    <input type="password" class="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none" id="password" placeholder="Password" />-->
+                                     {{ form.email }}
                                 </div>
-                            </div>
-
-                            <ul class="help-block text-danger list-unstyled mb-0">
-                                <li>{{ form.email.errors }}</li>
-                            </ul>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="input-group">
-                                {{ form.password1 }}
-
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-lock"></span>
-                                    </div>
+                                <ul class="help-block text-danger list-unstyled mb-0">
+                                    <li>{{ form.email.errors }}</li>
+                                </ul>
+                                <div class="form-group position-relative mb-3">
+<!--                                    <input type="password" class="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none" id="password" placeholder="Password" />-->
+                                     {{ form.password1 }}
                                 </div>
-                            </div>
-
-                            <ul class="help-block text-danger list-unstyled mb-0">
-                                <li>{{ form.password1.errors }}</li>
-                            </ul>
-                        </div>
-
-                        <div class="mb-3">
-                            <div class="input-group">
-                                {{ form.password2 }}
-
-                                <div class="input-group-append">
-                                    <div class="input-group-text">
-                                        <span class="fas fa-lock"></span>
-                                    </div>
+                               <ul class="help-block text-danger list-unstyled mb-0">
+                                    <li>{{ form.password1.errors }}</li>
+                                </ul>
+                                <div class="form-group position-relative mb-3">
+<!--                                    <input type="password" class="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none" id="password" placeholder="Password" />-->
+                                     {{ form.password2 }}
                                 </div>
-                            </div>
+                               <ul class="help-block text-danger list-unstyled mb-0">
+                                    <li>{{ form.password2.errors }}</li>
+                                </ul>
 
-                            <ul class="help-block text-danger list-unstyled mb-0">
-                                <li>{{ form.password2.errors }}</li>
-                            </ul>
-                        </div>
-
-                        <div class="row">
-                            <div class="col-8">
-
-                            </div>
-
-                            <div class="col-4">
-                                <button type="submit" class="btn btn-primary btn-block">Sign up</button>
+                                <button type="submit" class="btn btn-success btn-block shadow border-0 py-2 text-uppercase">Sign up</button>
+                                  </form>
+                                <p class="text-center mt-3" style="font-size:15px;">
+                                    Do you already have an account?
+                                    <span>
+                                        <a href="{% url 'login' %}">Sign In</a>
+                                    </span>
+                                </p>
                             </div>
                         </div>
-                    </form>
-
-                    <div class="social-auth-links text-center">
-                        <p>- OR -</p>
-                        <a href="{% url 'login' %}" class="btn btn-block btn-primary">
-                            <i class="fas fa-sign-in-alt mr-2"></i>
-                            Sign In
-                        </a>
                     </div>
                 </div>
-
-            </div>
         </div>
-    </body>
+    </div>
+</body>
+
 
 {% endblock %}
 
