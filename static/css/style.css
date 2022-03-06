@@ -1,0 +1,305 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900&display=swap');
+*{
+    padding: 0;
+    margin: 0;
+    outline: none;
+}
+body{
+    font-family: 'Roboto', sans-serif !important;
+    background-color: #e5e5e5;
+    color: #3a3e42 !important;
+}
+
+.error {
+    margin: 10px 30px 0 15px;
+}
+
+ul.errorlist li {
+    display: inline-flex;
+    margin-left: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+ul.errorlist li ul.errorlist li{
+    display: inline-flex;
+    margin-left: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+.AppForm .AppFormLeft button.btn.btn-success {
+    margin-top: 15px;
+}
+.AppForm .AppFormLeft h1{
+    font-size: 35px;
+}
+.AppForm .AppFormLeft input:focus{
+    border-color: #ced4da;
+}
+.AppForm .AppFormLeft input::placeholder{
+   font-size: 15px;
+}
+.AppForm .AppFormLeft i{
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+}
+.AppForm .AppFormLeft a{
+    color: #3a3e42 ;
+}
+.AppForm .AppFormLeft button{
+    background: linear-gradient(45deg,#00237a,#396297);
+    border-radius: 30px;
+}
+.AppForm .AppFormLeft p span a{
+    color: #182e64;
+    font-weight: bold;
+}
+.AppForm .AppFormRight{
+    height: 520px;
+    background-size: cover;
+    background-position: center;
+}
+.AppForm .AppFormRight:after{
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg,#00237a,#396297);
+    opacity: 0.5;
+}
+.AppForm .AppFormRight h2{
+    z-index: 1;
+}
+.AppForm .AppFormRight h2::after{
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background-color: #fff;
+  bottom: 0;
+  left:50%;
+  transform: translateX(-50%);
+}
+.AppForm .AppFormRight p{
+    z-index: 1;
+}
+
+.AppForm.shadow-lg {
+    background-color: #fff;
+}
+.AppFormLeft {
+    padding: 15px 20px;
+}
+
+
+ div#coin-marquee-container {
+    display: flex;
+    width: 100%;
+}
+
+.coin-marquee-container__inner {
+    display: flex;
+    width: 100%;
+}
+
+
+a.coin-marquee-item-inner {padding: 16px 0;display: flex;width: 100%;align-items: center;text-decoration: none;color: #000;}
+
+.coin-marquee-item__icon {
+    margin-right: 8px;
+    display: inline-block;
+    line-height: 1;
+    min-width: 20px;
+    max-width: 20px;
+}
+
+.coin-marquee-item-info {
+    width: 100%;
+}
+
+.coin-marquee-item-info__row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    line-height: 1;
+}
+
+.coin-marquee-item {
+    position: relative;
+    min-width: 220px;
+    display: inline-block;
+    box-sizing: border-box;
+    padding: 0 16px;
+}
+
+.coin-marquee-item__icon img {
+    width: 100%;
+    height: 100%;
+}
+
+.coin-marquee-item-name, .coin-marquee-item-price {
+    font-size: 12px;
+    line-height: 1;
+    font-weight: 600;
+}
+
+.coin-marquee-item-name {
+    margin-right: 12px;
+    transition: .1s;
+}
+
+.coin-marquee-item-symbol {
+    font-size: 11px;
+    color: #58667e;
+    transform-origin: left;
+    transform: scale(0.9);
+}
+
+.coin-marquee-item-changes--down {
+    color: #ea3943;
+}
+
+.coin-marquee-item-changes {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.coin-marquee-item-changes--down .coin-marquee-item-changes__icon {
+    top: 10px;
+    border-top: 5px solid #ea3943;
+}
+
+.coin-marquee-item-changes__icon {
+    width: 0;
+    height: 0;
+    position: relative;
+    margin-right: 3px;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+}
+
+.coin-marquee-wrapper {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    border-top: 1px solid #eff2f5;
+    border-bottom: 1px solid #eff2f5;
+    overflow: hidden;
+}
+
+.coin-marquee-header {
+    width: 140px;
+}
+
+.coin-marquee-header-signature {
+    overflow: hidden;
+    width: 141px;
+    padding: 12px 16px;
+    box-sizing: border-box;
+    border-right: 1px solid #eff2f5;
+}
+
+.coin-marquee-header-signature div {
+    height: 17px;
+    display: inline-block;
+    line-height: 18x;
+    font-weight: 400;
+    font-size: 9px;
+    line-height: 18px;
+    color: #808a9d;
+}
+
+.coin-marquee-item::after {
+    content: "";
+    position: absolute;
+    top: 20px;
+    right: 0;
+    display: inline-block;
+    background-color: #eff2f5;
+    width: 1px;
+    height: 20px;
+}
+
+.sidebar-dark-primary .nav-sidebar>.nav-item>.nav-link.active, .sidebar-light-primary .nav-sidebar>.nav-item>.nav-link.active {
+    background-color: unset;
+    color: #fff;
+}
+
+
+[class*=sidebar-dark-] .nav-sidebar>.nav-item>.nav-link.active {
+    color: #fff;
+    box-shadow: unset;
+}
+
+
+[class*=sidebar-dark-] {
+    background-color: #2a3042;
+}
+
+.side-nev-logo {
+    object-fit: cover;
+    text-align: center;
+}
+
+.side-nev-logo img {
+    width: 90px;
+}
+
+
+.card-header {
+    background-color: #2a3042;
+    border-bottom: 1px solid rgba(0,0,0,.125);
+    padding: 0.75rem 1.25rem;
+    position: relative;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    color: #fff;
+}
+
+.username-image {
+    background-color: #dfdfdf;
+    border-radius: 100%;
+    padding: 7px 8px;
+    font-size: 14px;
+    font-weight: 800;
+    margin-left: 10px;
+}
+
+.username-image p {
+    margin: 0;
+}
+
+
+.text-align-right{ text-align:right;}
+
+body.sidebar-mini.layout-fixed.sidebar-collapse .side-nev-logo img {
+    width: 60px;
+}
+
+
+
+@media (max-width: 768px) {
+.AppFormLeft {
+    padding: 0px 20px;
+    margin: 30px 0 40px;
+}
+.AppForm .AppFormLeft h1{ font-size:30px }
+
+.AppForm .AppFormRight {
+    height: 300px
+}
+
+}
+
+@media (max-width: 480px) {
+  .AppForm .AppFormLeft h1{ font-size:24px }
+}
+
+@media (max-width: 380px) {
+  .AppForm .AppFormRight{
+    height: 250px;
+  }
+}

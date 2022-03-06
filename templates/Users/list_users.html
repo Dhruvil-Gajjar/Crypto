@@ -1,0 +1,206 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block title %}
+    {% if request.resolver_match.url_name == 'list_users' %}
+        Users List
+    {% else %}
+        Employees List
+    {% endif %}
+{% endblock %}
+
+
+{% block extra_css %}
+
+    <!-- DataTables -->
+    <link rel="stylesheet" href="{% static 'css/datatables-bs4/dataTables.bootstrap4.min.css' %}">
+
+{% endblock %}
+
+
+{% block content_header %}
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1>
+                {% if request.resolver_match.url_name == 'list_users' %}
+                    Users List
+                {% else %}
+                    Employees List
+                {% endif %}
+            </h1>
+        </div>
+
+        <div class="col-sm-6 text-right">
+            {% if request.resolver_match.url_name == 'list_users' %}
+                <a type="button" href="{% url 'add_user' %}" class="btn bg-gradient-primary pl-3 pr-3">
+                    <i class="fa fa-plus"></i> Add User
+                </a>
+            {% else %}
+                <a type="button" href="{% url 'add_employee' %}" class="btn bg-gradient-primary pl-3 pr-3">
+                    <i class="fa fa-plus"></i> Add Employee
+                </a>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="col-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <table id="data-table" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Sr No.</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>E-Mail</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for user in users %}
+                                <tr>
+                                    <td>
+                                        {{ forloop.counter }}
+                                    </td>
+                                    <td>
+                                        {{ user.first_name }}
+                                    </td>
+                                    <td>
+                                        {{ user.last_name }}
+                                    </td>
+                                    <td>
+                                        {{ user.email }}
+                                    </td>
+                                    <td>
+                                        <div class="btn-group">
+                                            {#      User Status     #}
+                                            <button {% if user.is_superuser %}disabled{% endif %}
+                                                    type="button" title="Status"
+                                                    class="{% if user.is_active %} btn btn-success btn-status
+                                                           {% else %} btn btn-default btn-status {% endif %}
+                                                           {% if user.is_superuser %}disabled{% endif %}"
+                                                    data-source-id="{{ user.pk }}" >
+
+                                                <i class="{% if user.is_active %} fa fa-check
+                                                          {% else %} fa fa-ban {% endif %}"></i>
+                                            </button>
+
+                                            {#      Edit User     #}
+                                            <a href="{% if request.resolver_match.url_name == 'list_users' %}
+                                                        {% url 'edit_user' user.pk %}
+                                                     {% else %}
+                                                        {% url 'edit_employee' user.pk %}
+                                                     {% endif %}"
+                                               type="button" title="Edit"
+                                               class="btn btn-primary {% if user.is_superuser %}disabled{% endif %}" >
+                                                <i class="fas fa-user-edit"></i>
+                                            </a>
+
+                                            {#      Delete User     #}
+                                            <button type="button" {% if user.is_superuser %}disabled{% endif %}
+                                                    class="btn btn-danger btn-remove {% if user.is_superuser %}disabled{% endif %}"
+                                                    data-source-id="{{ user.pk }}" title="Delete" >
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.card-body -->
+            </div>
+            <!-- /.card -->
+        </div>
+        <!-- /.col -->
+    </div>
+    <!-- /.row -->
+{% endblock %}
+
+
+{% block extra_js %}
+
+    <!-- DataTables  & Plugins -->
+    <script src="{% static 'js/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'js/datatables-bs4/dataTables.bootstrap4.min.js' %}"></script>
+
+    <!-- SweetAlert2 -->
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
+    <script>
+        $(function () {
+            $("#data-table").DataTable({
+                "responsive": true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "ordering": false,
+                "paging": true,
+            });
+        });
+
+        var Toast = Swal.mixin({
+            toast: true,
+            position: 'top',
+            showConfirmButton: false,
+            timer: 3000
+		});
+
+        $(document).ready(function () {
+            $(document).on('click', '.btn-remove', function (e) {
+                var $this = $(this);
+                if (confirm("Are you sure want to delete this?")) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/user/action/delete/" + $this.data('source-id') + "/",
+                        success: function (response) {
+                            if (response['success']) {
+                                $this.closest('tr').fadeOut('slow', function () {
+                                    $(this).remove();
+                                });
+                                Toast.fire({icon: 'success', title: response['message']})
+                            } else {
+                                Toast.fire({icon: 'error', title: response['message']})
+                            }
+                        }
+                    }).fail(function (xhr, status) {
+                        Toast.fire({icon: 'error', title: xhr.status + " " + xhr.statusText})
+                    });
+                }
+            });
+
+            $(document).on('click', '.btn-status', function (e) {
+                var currentBtn = $(e.currentTarget);
+                var $this = $(this);
+                $.ajax({
+                    type: "POST",
+                    url: "/user/action/toggle-status/" + $this.data('source-id') + "/",
+                    success: function (response) {
+                        if (response['success']) {
+                            if (currentBtn.hasClass('btn-success')) {
+                                currentBtn.removeClass('btn-success').addClass('btn-default');
+                                currentBtn.find('i').removeClass('fa-check').addClass('fa-ban');
+                            } else {
+                                currentBtn.removeClass('btn-default').addClass('btn-success');
+                                currentBtn.find('i').removeClass('fa-ban').addClass('fa-check');
+                            }
+                            Toast.fire({icon: 'success', title: response['message']});
+                        } else {
+                            Toast.fire({icon: 'error', title: response['message']});
+                        }
+                    }
+                }).fail(function (xhr, status) {
+                    Toast.fire({icon: 'error', title: xhr.status + " " + xhr.statusText})
+                });
+            });
+
+        });
+    </script>
+{% endblock %}

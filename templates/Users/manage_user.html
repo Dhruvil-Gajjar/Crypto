@@ -1,0 +1,137 @@
+{% extends 'index.html' %}
+{% load static %}
+
+
+{% block title %}
+    User Management
+{% endblock %}
+
+
+{% block extra_css %}
+    <!-- Select2 -->
+    <link rel="stylesheet" href="{% static 'css/select2/select2.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/select2-bootstrap4-theme/select2-bootstrap4.min.css' %}">
+
+    <style>
+        .select2-container{
+            width: 100% !important;
+            max-width: 100%;
+        }
+        .select2-container .select2-selection--single{
+            height: 37px !important;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content_header %}
+    <div class="row m-0 mb-2">
+        <div class="col-sm-6 align-self-sm-end">
+            <h1 style="color:#003366;">
+                {% if request.resolver_match.url_name == 'add_user' %}
+                    Add User
+                {% else %}
+                    Edit User
+                {% endif %}
+            </h1>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card card-primary">
+                <div class="card-header with-border">
+                    <h3 class="card-title">Details</h3>
+                </div>
+                <!-- /.card-header -->
+                <!-- form start -->
+                <form method="post" >
+                    <div class="card-body" style="display: flex; flex-wrap: wrap">
+                        {% csrf_token %}
+                        {% for field in form %}
+                            {% if field.field.widget.input_type == "checkbox" %}
+                                <div class="form-group {% if field.errors %}has-error{% else %}has-feedback{% endif %}"
+                                     style="flex: 1 1 50%; padding: 0 20px;">
+                                    <div class="form-check">
+                                        <label>
+                                            {{ field }}
+                                            {{ field.label }}
+                                        </label>
+                                        <div class="help-block text-gray">{{ field.help_text }}</div>
+                                        {% if field.errors %}
+                                            <ul class="help-block text-danger list-unstyled">
+                                                {% for error in field.errors %}
+                                                    <li>{{ error }}</li>
+                                                {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="form-group {% if field.errors %}has-error{% else %}has-feedback{% endif %}"
+                                    style="flex: 1 1 100%; padding: 0 20px;">
+                                    {{ field.label_tag }}
+                                    {{ field }}
+                                    <div class="help-block text-gray">{{ field.help_text }}</div>
+                                    {% if field.errors %}
+                                        <ul class="help-block text-danger list-unstyled">
+                                            {% for error in field.errors %}
+                                                <li>{{ error }}</li>
+                                            {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        {% csrf_token %}
+                        <a href="{% if request.resolver_match.url_name == 'add_user' or request.resolver_match.url_name == 'edit_user' %}
+                                    {% url 'list_users' %}
+                                 {% elif request.resolver_match.url_name == 'add_employee' or request.resolver_match.url_name == 'edit_employee' %}
+                                    {% url 'list_employees' %}
+                                 {% endif %}"
+                           class="btn btn-danger">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+
+
+{% block extra_js %}
+    <!-- Select2 -->
+    <script src="{% static 'js/select2/select2.full.min.js' %}"></script>
+
+    <script>
+        $(function () {
+            $('.select2').select2();
+        });
+
+        function show_hide_assign_manager(){
+            if ($('#id_is_manager').is(":checked")) {
+                $('label[for="id_parent_user_id"]').parent().hide();
+            }else{
+                $('label[for="id_parent_user_id"]').parent().show();
+            }
+        }
+        $(document).ready(function () {
+            $(document).on('submit', 'form', function (e) {
+                $(this).find('button').attr('disabled', 'disabled');
+            });
+
+            show_hide_assign_manager();
+        });
+        $(document).on('change', '#id_is_manager', function (e) {
+            show_hide_assign_manager();
+        });
+    </script>
+
+{% endblock %}

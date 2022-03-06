@@ -1,0 +1,67 @@
+{% extends 'main.html' %}
+{% load static %}
+
+{% block body %}
+
+<body>
+    <div class="container">
+        <div class="row justify-content-center align-items-center" style="margin: 50px 0;">
+            <div class="col-lg-8 col-md-12 col-sm-12 col-12">
+
+                <div class="AppForm shadow-lg">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div style="background-image: url('{% static "img/signup.jpg" %}')"; class="AppFormRight position-relative d-flex justify-content-center flex-column align-items-center text-center p-5 text-white">
+                                <h2 class="position-relative px-4 pb-3 mb-4">Welcome</h2>
+                                <p>Lorem ipsuing elit. Molomos totam est voluptatum i omos totam est voluptatum i ure sit consectetur ill</p>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 justify-content-center align-items-center">
+                            <div class="error">
+                                {% if form.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    Please enter a correct email address and password. Note that both fields may be case-sensitive
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="AppFormLeft" {% if form.errors %} style="transform: translateY(0%);" {% else %} style="transform: translateY(45%);" {% endif %}>
+                                <h1 style="color: #1a3067; font-weight: bolder;">Sign In</h1>
+                                <form method="post">
+                                {% csrf_token %}
+                                <div class="form-group position-relative mb-3">
+                                     <input type="text" class="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none" placeholder="Email" id="id_username" name="username"
+                                   required="required" autofocus="autofocus">
+                                </div>
+                                <div class="form-group position-relative mb-3">
+                                     <input type="password" class="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none" placeholder="Password" id="id_password"
+                                   name="password" required="required">
+                                </div>
+
+                                <button type="submit" class="btn btn-success btn-block shadow border-0 py-2 text-uppercase">Sign In</button>
+                                  </form>
+                                <p class="text-center mt-3" style="font-size:15px;">
+                                    Don't have an account?
+                                    <span>
+                                        <a href="{% url 'user_signup' %}">Sign Up</a>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+</body>
+
+
+{% endblock %}
+
+
+{% block extra_js %}
+    <script>
+        $(document).ready(function() {
+
+        });
+    </script>
+{% endblock %}
