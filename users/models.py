@@ -58,3 +58,11 @@ class User(AbstractUser):
         if self.first_name and self.last_name:
             return self.first_name + " " + self.last_name
         return self.email
+
+    @property
+    def dashboard_name(self):
+        if self.first_name and self.last_name:
+            first_name = str(self.first_name)
+            last_name = str(self.last_name)
+            return first_name[:1] + last_name[:1]
+        return "CP"

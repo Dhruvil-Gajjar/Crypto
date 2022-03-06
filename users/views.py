@@ -1,3 +1,4 @@
+from django.contrib.auth.views import LoginView
 from django.db import transaction
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
@@ -16,10 +17,14 @@ def user_signup(request):
 
         if form.is_valid():
             form.save()
-            return redirect('/')
+            return redirect('login')
     else:
         form = SignupForm()
     return render(request, 'Auth/signup.html', {'form': form})
+
+
+class UserLoginView(LoginView):
+    template_name = 'Auth/login.html'
 
 
 @login_required()

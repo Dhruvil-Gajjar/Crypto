@@ -17,8 +17,15 @@
                             </div>
                         </div>
 
-                        <div class="col-md-6 d-flex justify-content-center align-items-center">
-                            <div class="AppFormLeft">
+                        <div class="col-md-6 justify-content-center align-items-center">
+                            <div class="error">
+                                {% if form.errors %}
+                                <div class="alert alert-danger" role="alert">
+                                    Please enter a correct email address and password. Note that both fields may be case-sensitive
+                                </div>
+                                {% endif %}
+                            </div>
+                            <div class="AppFormLeft" {% if form.errors %} style="transform: translateY(0%);" {% else %} style="transform: translateY(45%);" {% endif %}>
                                 <h1 style="color: #1a3067; font-weight: bolder;">Sign In</h1>
                                 <form method="post">
                                 {% csrf_token %}
@@ -26,16 +33,10 @@
                                      <input type="text" class="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none" placeholder="Email" id="id_username" name="username"
                                    required="required" autofocus="autofocus">
                                 </div>
-                                <ul class="help-block text-danger list-unstyled mb-0">
-                                    <li>{{ form.username.errors }}</li>
-                                </ul>
                                 <div class="form-group position-relative mb-3">
                                      <input type="password" class="form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none" placeholder="Password" id="id_password"
                                    name="password" required="required">
                                 </div>
-                                <ul class="help-block text-danger list-unstyled mb-0">
-                                    <li>{{ form.password.errors }}</li>
-                                </ul>
 
                                 <button type="submit" class="btn btn-success btn-block shadow border-0 py-2 text-uppercase">Sign In</button>
                                   </form>
