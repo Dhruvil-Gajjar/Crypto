@@ -282,16 +282,16 @@ body.sidebar-mini.layout-fixed.sidebar-collapse .side-nev-logo img {
 
 
 @media (max-width: 768px) {
-.AppFormLeft {
-    padding: 0px 20px;
-    margin: 30px 0 40px;
-    transform: translateY(0%);
-}
-.AppForm .AppFormLeft h1{ font-size:30px }
+    .AppFormLeft {
+        padding: 0px 20px;
+        margin: 30px 0 40px;
+        transform: translateY(0%);
+    }
+    .AppForm .AppFormLeft h1{ font-size:30px }
 
-.AppForm .AppFormRight {
-    height: 300px
-}
+    .AppForm .AppFormRight {
+        height: 300px
+    }
 
 }
 

@@ -16,7 +16,7 @@ from users.models import User
 #     return render(request, 'dashboard.html', context=context)
 
 
-class DashboardView(TemplateView):
+class DashboardView(LoginRequiredMixin, TemplateView):
     template_name = "dashboard.html"
 
     def get_context_data(self, **kwargs):

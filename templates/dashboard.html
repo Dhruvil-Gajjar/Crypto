@@ -14,7 +14,6 @@
 
 
 {% block content %}
-    {% if request.user.is_authenticated %}
     <div class="content">
       <div class="container-fluid">
         <div class="row">
@@ -428,9 +427,6 @@
       </div>
       <!-- /.container-fluid -->
     </div>
-    {% else %}
-    <h4>Please <a href="{% url 'login' %}">sign-in</a> to continue !</h4>
-    {% endif %}
 {% endblock %}
 
 

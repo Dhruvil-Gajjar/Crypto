@@ -1,12 +1,49 @@
-{% extends 'index.html' %}
+{% extends 'main.html' %}
 
-{% block content %}
-<h4>
-    Hi, {{ first_name }} {{ last_name }}
-</h4>
+{% block extra_css %}
+    <link href='https://fonts.googleapis.com/css?family=Lato:300,400|Montserrat:700' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" href="https://2-22-4-dot-lead-pages.appspot.com/static/lp918/min/default_thank_you.css">
 
-<h5>
-    You will receive a mail at your e-mail address.
-    Please click on the given link there and verify your email address to complete the registration.
-</h5>
+    <style>
+		@import url(//cdnjs.cloudflare.com/ajax/libs/normalize/3.0.1/normalize.min.css);
+		@import url(//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css);
+
+        .main-content i {font-size: 160px;}
+
+        @media (max-width: 768px) {
+            .site-header__title {font-size: 65px;}
+            .main-content i {font-size: 130px;}
+        }
+
+        @media (max-width: 480px) {
+            .site-header__title {
+                font-size: 45px;
+            }
+
+            .main-content i {
+                font-size: 90px;
+            }
+        }
+
+	</style>
+{% endblock %}
+
+
+{% block body %}
+<body>
+	<header class="site-header" id="header">
+		<h1 class="site-header__title" data-lead-id="site-header-title">THANK YOU!</h1>
+	</header>
+
+	<div class="main-content">
+		<i class="fa fa-check main-content__checkmark" id="checkmark"></i>
+		<p class="main-content__body" data-lead-id="main-content-body">
+            Welcome to <b>CRYPTO-PORTAL</b>. You will receive a mail at your e-mail address. Please <b>click</b> on the given link there and <b>verify your email address to complete the registration.
+        </b></p>
+	</div>
+
+	<footer class="site-footer" id="footer">
+		<p class="site-footer__fineprint" id="fineprint">Copyright ©2014 | All Rights Reserved</p>
+	</footer>
+</body>
 {% endblock %}
