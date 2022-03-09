@@ -285,7 +285,7 @@ body.sidebar-mini.layout-fixed.sidebar-collapse .side-nev-logo img {
     .AppFormLeft {
         padding: 0px 20px;
         margin: 30px 0 40px;
-        transform: translateY(0%);
+        transform: translateY(0%) !important;
     }
     .AppForm .AppFormLeft h1{ font-size:30px }
 
