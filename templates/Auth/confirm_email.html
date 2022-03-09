@@ -1,11 +1,12 @@
-{% extends 'main.html' %}
+{% extends 'index.html' %}
 
-{% block body %}
-<h3>
+{% block content %}
+<h4>
     Hi, {{ first_name }} {{ last_name }}
-</h3>
+</h4>
 
-<H3>
-    Please confirm your email address to complete the registration.
-</H3>
+<h5>
+    You will receive a mail at your e-mail address.
+    Please click on the given link there and verify your email address to complete the registration.
+</h5>
 {% endblock %}

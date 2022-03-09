@@ -1,5 +1,14 @@
 {% autoescape off %}
-Hi {{ user.first_name }} {{ user.last_name }},
-Please click on the link to confirm your registration,
+*****************************
+This is an auto-generated email.
+Please do not reply to this email. We thank you for your kind understanding.
+
+If you are unsure as to why you are receiving this email, or have any inquiries,
+please contact us using the inquiry form on our website. We apologize for any inconvenience caused.
+*****************************
+
+Thank you for using CRYPTO-PORTAL.
+Please click on the below given link to complete your registration,
+
 http://{{ domain }}{% url 'activate_user' user.pk token %}
 {% endautoescape %}

@@ -33,6 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Celery
+    'django_celery_results',
+
     # APPS
     'users',
     'core',
@@ -109,3 +112,16 @@ USE_TZ = True
 # User Redirect
 LOGIN_URL = "/login"
 LOGIN_REDIRECT_URL = 'dashboard'
+
+
+# Celery Settings
+CELERY_RESULT_BACKEND = "django-db"
+
+
+# Email Settings
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
+EMAIL_USE_TLS = True
+EMAIL_PORT = 587
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')

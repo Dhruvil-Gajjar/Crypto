@@ -7,6 +7,7 @@ from users.views import *
 urlpatterns = [
     # Authentication
     path('signup/', user_signup, name='user_signup'),
+    path('activate/<uuid:uid>/<str:token>/', activate_user, name='activate_user'),
 
     path('login/', UserLoginView.as_view(template_name = 'Auth/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/login'), name='logout'),

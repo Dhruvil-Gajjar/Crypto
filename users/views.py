@@ -1,12 +1,17 @@
-from django.contrib.auth.views import LoginView
 from django.db import transaction
+from django.contrib.auth import login
+from django.contrib.auth.views import LoginView
+from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect, JsonResponse
+from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 
 from users.models import User
+from users.tasks import send_activation_link
+from users.tokens import account_activation_token
 from users.forms import SignupForm, RegisterForm, EditUserForm, UpdateUserForm
 
 
@@ -16,11 +21,40 @@ def user_signup(request):
         form = SignupForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect('login')
+            user = form.save(commit=False)
+            user.is_active = False
+            user.save()
+            current_site = get_current_site(request)
+            to_email = form.cleaned_data.get('email')
+            message = render_to_string('Auth/acc_active_email.html', {
+                'user': user,
+                'domain': current_site.domain,
+                'uid': user.pk,
+                'token': account_activation_token.make_token(user),
+            })
+            send_activation_link.delay(message, to_email)
+            return render(
+                request,
+                'Auth/confirm_email.html',
+                {'first_name': user.first_name, 'last_name': user.last_name}
+            )
     else:
         form = SignupForm()
     return render(request, 'Auth/signup.html', {'form': form})
+
+
+def activate_user(request, uid, token):
+    try:
+        user = User.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('dashboard')
+    else:
+        return HttpResponse('Activation link is invalid!')
 
 
 class UserLoginView(LoginView):
