@@ -33,7 +33,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    'django_extensions',
+
     # Celery
+    'django_celery_beat',
     'django_celery_results',
 
     # APPS
