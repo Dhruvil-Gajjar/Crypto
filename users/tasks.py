@@ -1,3 +1,4 @@
+from celery import shared_task
 from datetime import datetime, timedelta
 from django.core.mail import EmailMessage
 
@@ -26,7 +27,7 @@ def get_date_N_days_ago(days):
     return date.strftime('%Y-%m-%d')
 
 
-@app.task()
+@shared_task
 def end_user_free_trial_period():
     trial_end_date = get_date_N_days_ago(14)
 
