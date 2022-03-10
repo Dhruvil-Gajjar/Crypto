@@ -34,7 +34,15 @@
                         </p>
                     </a>
                 </li>
-
+                <li class="nav-header">Subscription</li>
+                <li class="nav-item">
+                    <a href="{% url 'plan' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
+                        <i class="nav-icon far fa-plus-square"></i>
+                        <p>
+                            Plans
+                        </p>
+                    </a>
+                </li>
                 {% if user.is_superuser %}
                     <li class="nav-item {% if request.resolver_match.url_name == 'list_users' or request.resolver_match.url_name == 'add_user' %}menu-open{% endif %}">
                         <a class="nav-link">
