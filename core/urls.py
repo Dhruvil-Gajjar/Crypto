@@ -1,8 +1,8 @@
 from django.urls import path
 
-from core.views.dashboard import DashboardView, PlanView
+from core.views.dashboard import DashboardView, SubscriptionView
 
 urlpatterns = [
     path('', DashboardView.as_view(), name='dashboard'),
-    path('plan', PlanView.as_view(), name='plan'),
+    path('subscriptions', SubscriptionView.as_view(), name='subscriptions'),
 ]

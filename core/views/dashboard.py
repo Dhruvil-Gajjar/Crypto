@@ -15,7 +15,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
         return context
 
 
-class PlanView(LoginRequiredMixin, TemplateView):
-    template_name = "plan.html"
+class SubscriptionView(LoginRequiredMixin, TemplateView):
+    template_name = "Subscriptions/subscriptions.html"
 
 

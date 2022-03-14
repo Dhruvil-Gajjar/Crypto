@@ -34,12 +34,13 @@
                         </p>
                     </a>
                 </li>
-                <li class="nav-header">Subscription</li>
+
                 <li class="nav-item">
-                    <a href="{% url 'plan' %}" class="nav-link {% if request.resolver_match.url_name == 'dashboard' %}active{% endif %}">
-                        <i class="nav-icon far fa-plus-square"></i>
+                    <a href="{% url 'subscriptions' %}" class="nav-link {% if request.resolver_match.url_name == 'subscriptions' %}active{% endif %}">
+
+                        <i class="nav-icon fa fa-sticky-note"></i>
                         <p>
-                            Plans
+                            Subscriptions
                         </p>
                     </a>
                 </li>
