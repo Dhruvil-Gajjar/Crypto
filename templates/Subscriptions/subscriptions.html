@@ -1,7 +1,7 @@
 {% extends 'index.html' %}
 
 {% block title %}
-    Dashboard
+    Subscriptions
 {% endblock %}
 
 
@@ -10,7 +10,7 @@
         .card{
           position: relative;
           max-width: 300px;
-          height: 360px;
+          height: 380px;
           background: linear-gradient(-45deg,#fe0847,#feae3f);
           border-radius: 15px;
           margin: 0 auto 20px;
@@ -107,6 +107,8 @@
             margin-top: 30px;
         }
     </style>
+
+
 {% endblock %}
 
 {% block content_header %}
@@ -121,6 +123,7 @@
           </div>
         </div>
       </div>
+    </div>
 {% endblock %}
 
 
@@ -129,58 +132,31 @@
   <div class="container-fluid">
     <div class="container">
       <div class="row">
-        <div class="col-lg-4 col-xl-4 col-md-4 col-sm-12 col-12 col plan-card">
-          <div class="card text-center">
 
-            <div class="price">
-              <h4><sup>$</sup>25</h4>
+          {% for product in products %}
+            <div class="col-lg-4 col-xl-4 col-md-4 col-sm-12 col-12 col plan-card">
+              <div class="card text-center">
+
+                <div class="price">
+                  <h4><sup>₹</sup>{{ product.price }}</h4>
+                </div>
+
+                <div class="option">
+                  <ul>
+                  <li> <i class="fa fa-check" aria-hidden="true"></i> {{ product.billingPeriod }} </li>
+                  <li> <i class="fa fa-check" aria-hidden="true"></i> 3 Domain Names </li>
+                  <li> <i class="fa fa-check" aria-hidden="true"></i> 20 Email Address </li>
+                  <li> <i class="fa fa-times" aria-hidden="true"></i> Live Support </li>
+                  </ul>
+                </div>
+                <a type="submit" class="stripe-product"
+                   data-value="{{ product.stripeProductId }}" id="submitBtn">
+                    Subscribe
+                </a>
+              </div>
             </div>
-            <div class="option">
-              <ul>
-              <li> <i class="fa fa-check" aria-hidden="true"></i> 10 GB Space </li>
-              <li> <i class="fa fa-check" aria-hidden="true"></i> 3 Domain Names </li>
-              <li> <i class="fa fa-check" aria-hidden="true"></i> 20 Email Address </li>
-              <li> <i class="fa fa-times" aria-hidden="true"></i> Live Support </li>
-              </ul>
-            </div>
-            <a href="#">Order Now </a>
-          </div>
-        </div>
-        <!-- END Col one -->
-        <div class="col-lg-4 col-xl-4 col-md-4 col-sm-12 col-12 col plan-card">
-          <div class="card text-center">
-            <div class="price">
-              <h4><sup>$</sup>50</h4>
-            </div>
-            <div class="option">
-              <ul>
-              <li> <i class="fa fa-check" aria-hidden="true"></i> 50 GB Space </li>
-              <li> <i class="fa fa-check" aria-hidden="true"></i> 5 Domain Names </li>
-              <li> <i class="fa fa-check" aria-hidden="true"></i> Unlimited Email Address </li>
-              <li> <i class="fa fa-times" aria-hidden="true"></i> Live Support </li>
-              </ul>
-            </div>
-            <a href="#">Order Now </a>
-          </div>
-        </div>
-        <!-- END Col two -->
-        <div class="col-lg-4 col-xl-4 col-md-4 col-sm-12 col-12 col plan-card">
-          <div class="card text-center">
-            <div class="price">
-              <h4><sup>$</sup>100</h4>
-            </div>
-            <div class="option">
-              <ul>
-              <li> <i class="fa fa-check" aria-hidden="true"></i> Unlimited GB Space </li>
-              <li> <i class="fa fa-check" aria-hidden="true"></i> 30 Domain Names </li>
-              <li> <i class="fa fa-check" aria-hidden="true"></i> Unlimited Email Address </li>
-              <li> <i class="fa fa-check" aria-hidden="true"></i> Live Support </li>
-              </ul>
-            </div>
-            <a href="#">Order Now </a>
-          </div>
-        </div>
-        <!-- END Col three -->
+          {% endfor %}
+
       </div>
     </div>
   </div>
@@ -189,5 +165,36 @@
 
 
 {% block extra_js %}
+    <script src="https://js.stripe.com/v3/"></script>
+    <script>
+        var stripe;
+        $( document ).ready(function() {
+            $.ajax({
+            url: '/config/',
+            method:'get',
+            dataType: 'json',
+            success: function (data) {
+                console.log("get");
+                stripe  = Stripe(data.publicKey);
+            }
+          });
+        });
 
+        $(".stripe-product").click(function () {
+          stripeProductId = $(this).data('value');
+          $.ajax({
+            url: '/create-checkout-session/',
+            method:'post',
+            data: {'stripeProductId': stripeProductId},
+            dataType: 'json',
+            success: function (data) {
+                return stripe.redirectToCheckout({sessionId: data.sessionId})
+            },
+              error: function (jqXHR, exception) {
+                console.log(exception);
+                },
+          });
+
+        });
+    </script>
 {% endblock %}
