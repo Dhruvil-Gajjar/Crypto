@@ -1,3 +1,4 @@
+from datetime import datetime
 from core.models import *
 
 
@@ -36,8 +37,8 @@ def get_trail():
 
 def get_timeStamp(dtObj):
     try:
-        time_stamp = str(dtObj.timestamp()).split(".")[0]
-        return int(time_stamp)
+        unix_time = datetime.timestamp(dtObj) * 1000
+        return int(unix_time)
     except:
         return None
 
@@ -69,3 +70,5 @@ def get_prediction():
             prediction_dict["predicted"].append(float(1740.7343300059))
 
     return prediction_dict
+
+# 1361401200000
