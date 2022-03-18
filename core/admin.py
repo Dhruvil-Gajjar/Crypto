@@ -2,7 +2,7 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
 from core.resource import *
-from core.forms import EuroForm
+# from core.forms import EuroForm
 
 
 # Gold
@@ -16,7 +16,7 @@ admin.site.register(Gold, GoldAdmin)
 # Euro
 class EuroAdmin(ImportExportModelAdmin):
     resource_class = EuroResource
-    form = EuroForm
+    # form = EuroForm
 
 
 admin.site.register(Euro, EuroAdmin)

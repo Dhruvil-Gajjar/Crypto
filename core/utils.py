@@ -3,11 +3,11 @@ from core.models import *
 
 
 def get_trail():
-    gold_obj = Gold.objects.all().order_by('created_at').first()
-    euro_obj = Euro.objects.all().order_by('created_at').first()
-    jpy_obj = JPY.objects.all().order_by('created_at').first()
-    cny_obj = CNY.objects.all().order_by('created_at').first()
-    gbp_obj = GBP.objects.all().order_by('created_at').first()
+    gold_obj = Gold.objects.all().order_by('-dateTimeStamp').first()
+    euro_obj = Euro.objects.all().order_by('-dateTimeStamp').first()
+    jpy_obj = JPY.objects.all().order_by('-dateTimeStamp').first()
+    cny_obj = CNY.objects.all().order_by('-dateTimeStamp').first()
+    gbp_obj = GBP.objects.all().order_by('-dateTimeStamp').first()
 
     trail = [
         {
@@ -48,7 +48,7 @@ def get_sparkline():
         "data": []
     }
 
-    gold_queryset = Gold.objects.all().order_by('created_at')
+    gold_queryset = Gold.objects.all().order_by('-dateTimeStamp')
     for obj in gold_queryset:
         time_stamp = get_timeStamp(obj.dateTimeStamp)
         if time_stamp:
@@ -63,12 +63,10 @@ def get_prediction():
         "predicted": []
     }
 
-    gold_queryset = Gold.objects.all().order_by('created_at')
+    gold_queryset = Gold.objects.all().order_by('-dateTimeStamp')
     for obj in gold_queryset:
         if obj.price and obj.predicted_price:
             prediction_dict["actual"].append(float(str(obj.price).replace(",", "")))
             prediction_dict["predicted"].append(float(1740.7343300059))
 
     return prediction_dict
-
-# 1361401200000
