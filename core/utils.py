@@ -32,3 +32,40 @@ def get_trail():
     ]
 
     return trail
+
+
+def get_timeStamp(dtObj):
+    try:
+        time_stamp = str(dtObj.timestamp()).split(".")[0]
+        return int(time_stamp)
+    except:
+        return None
+
+
+def get_sparkline():
+    sparkline_dict = {
+        "data": []
+    }
+
+    gold_queryset = Gold.objects.all().order_by('created_at')
+    for obj in gold_queryset:
+        time_stamp = get_timeStamp(obj.dateTimeStamp)
+        if time_stamp:
+            sparkline_dict["data"].append([time_stamp, float(str(obj.price).replace(",", ""))])
+
+    return sparkline_dict
+
+
+def get_prediction():
+    prediction_dict = {
+        "actual": [],
+        "predicted": []
+    }
+
+    gold_queryset = Gold.objects.all().order_by('created_at')
+    for obj in gold_queryset:
+        if obj.price and obj.predicted_price:
+            prediction_dict["actual"].append(float(str(obj.price).replace(",", "")))
+            prediction_dict["predicted"].append(float(1740.7343300059))
+
+    return prediction_dict
