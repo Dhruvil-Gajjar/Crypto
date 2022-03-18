@@ -11,6 +11,7 @@ from django.http.response import HttpResponseNotFound, JsonResponse, HttpRespons
 from django.views.generic import ListView, CreateView, DetailView, TemplateView
 
 from users.models import User
+from subscription.utils import create_order_history
 from subscription.models import Product, OrderDetail
 
 
@@ -102,18 +103,30 @@ def stripe_webhook(request):
         stripe_customer_id = session.get('customer')
         stripe_subscription_id = session.get('subscription')
 
-        # Get the user and create a new StripeCustomer
+        # Fetch Subscription End & Start Date
+        subscription = stripe.Subscription.retrieve(stripe_subscription_id)
+        # current_period_end
+        # current_period_start
+        product = stripe.Product.retrieve(subscription.plan.product)
+
+        # Get the user and create a new Order
         user = User.objects.get(id=client_reference_id)
         order_obj = OrderDetail.objects.filter(user=user)
 
+        # Create Order History
         if order_obj.exists():
-            order_obj.update(is_active=False)
+            create_order_history(order_obj, subscription, product)
+            order_obj.delete()
 
         OrderDetail.objects.create(
             user=user,
             stripeCustomerId=stripe_customer_id,
             stripeSubscriptionId=stripe_subscription_id,
+            productName=product.name,
+            subscriptionStartDate=subscription.current_period_start,
+            subscriptionEndDate=subscription.current_period_end
         )
 
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Payment Successful!!")
         print(user.username if user.username else user.id + ' just subscribed.')
     return HttpResponse(status=200)

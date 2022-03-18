@@ -33,7 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Libraries
     'django_extensions',
+    'import_export',
 
     # Celery
     'django_celery_beat',

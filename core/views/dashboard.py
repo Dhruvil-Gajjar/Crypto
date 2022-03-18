@@ -5,6 +5,7 @@ from django.views.generic import TemplateView
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from users.models import User
+from core.utils import get_trail
 from subscription.models import OrderDetail
 
 
@@ -19,11 +20,13 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             stripe_customer = OrderDetail.objects.get(user=self.request.user, is_active=True)
             stripe.api_key = settings.STRIPE_SECRET_KEY
             subscription = stripe.Subscription.retrieve(stripe_customer.stripeSubscriptionId)
-            product = stripe.Product.retrieve(subscription.plan.product)
+
+            # Get Trail
+            trails = get_trail()
 
             context.update({
                 'subscription': subscription,
-                'product': product
+                'trails': trails
             })
 
             return context

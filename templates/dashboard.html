@@ -28,6 +28,52 @@
     font-size: 20px;
     color: #000;
 }
+.left-sec {
+    overflow: hidden;
+    width: 100%;
+}
+
+.scroll-left {
+height: 50px;
+overflow: hidden;
+position: relative;
+}
+.scroll-left{
+width: 100%;
+height: 100%;
+margin: 0;
+line-height: 50px;
+text-align: center;
+/* Starting position */
+-moz-transform:translateX(100%);
+-webkit-transform:translateX(100%);
+transform:translateX(100%);
+/* Apply animation to this element */
+-moz-animation: scroll-left 10s linear infinite;
+-webkit-animation: scroll-left 10s linear infinite;
+animation: scroll-left 10s linear infinite;
+}
+/* Move it (define the animation) */
+@-moz-keyframes scroll-left {
+0% { -moz-transform: translateX(100%); }
+100% { -moz-transform: translateX(-100%); }
+}
+@-webkit-keyframes scroll-left {
+0% { -webkit-transform: translateX(100%); }
+100% { -webkit-transform: translateX(-100%); }
+}
+@keyframes scroll-left {
+0% {
+-moz-transform: translateX(100%); /* Browser bug fix */
+-webkit-transform: translateX(100%); /* Browser bug fix */
+transform: translateX(100%);
+}
+100% {
+-moz-transform: translateX(-100%); /* Browser bug fix */
+-webkit-transform: translateX(-100%); /* Browser bug fix */
+transform: translateX(-100%);
+}
+}
 
 @media (max-width: 400px) {
     .title-sec h1{ font-size: 30px; }
@@ -71,224 +117,29 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div id="coin-marquee-container" class="coin-marquee-container">
-                                        <div class="coin-marquee-container__inner" style="animation-duration: 13.2s; animation-name: marquee-scroll; animation-timing-function: linear; animation-iteration-count: infinite;">
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/bitcny" title="bitCNY" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/624.png" />
-                                                    </div>
+                                    <div class="left-sec">
+                                        <div id="coin-marquee-container" class="coin-marquee-container scroll-left">
+                                            <div class="coin-marquee-container__inner">
+                                                {% for trail in trails %}
+                                                    <div class="coin-marquee-item">
+                                                        <a class="coin-marquee-item-inner" href="#" title="bitCNY" target="_blank">
+                                                            <div class="coin-marquee-item__icon">
+                                                                <img src="{{ trail.commodity_img }}" />
+                                                            </div>
 
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">bitCNY</div>
-                                                            <div class="coin-marquee-item-price">$0.155883</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">BITCNY</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--down"><span class="coin-marquee-item-changes__icon"></span>-0.76%</div>
-                                                        </div>
+                                                            <div class="coin-marquee-item-info">
+                                                                <div class="coin-marquee-item-info__row">
+                                                                    <div class="coin-marquee-item-name">bitCNY</div>
+                                                                    <div class="coin-marquee-item-price">${{ trail.price }}</div>
+                                                                </div>
+                                                                <div class="coin-marquee-item-info__row">
+                                                                    <div class="coin-marquee-item-symbol">BITCNY</div>
+                                                                    <div class="coin-marquee-item-changes coin-marquee-item-changes--down"><span class="coin-marquee-item-changes__icon"></span>-0.76%</div>
+                                                                </div>
+                                                            </div>
+                                                        </a>
                                                     </div>
-                                                </a>
-                                            </div>
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/bitcoin-gold" title="Bitcoin Gold" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/2083.png" />
-                                                    </div>
-
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">Bitcoin Gold</div>
-                                                            <div class="coin-marquee-item-price">$27.78</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">BTG</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--down"><span class="coin-marquee-item-changes__icon"></span>-4.32%</div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/stasis-euro" title="STASIS EURO" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/2989.png" />
-                                                    </div>
-
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">STASIS EURO</div>
-                                                            <div class="coin-marquee-item-price">$1.14</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">EURS</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--up"><span class="coin-marquee-item-changes__icon"></span>0.39%</div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/usd-coin" title="USD Coin" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/3408.png" />
-                                                    </div>
-
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">USD Coin</div>
-                                                            <div class="coin-marquee-item-price">$1.00</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">USDC</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--down"><span class="coin-marquee-item-changes__icon"></span>-0.01%</div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/upper-pound" title="Upper Pound" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/6906.png" />
-                                                    </div>
-
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">Upper Pound</div>
-                                                            <div class="coin-marquee-item-price">$1.36</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">GBPU</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--down"><span class="coin-marquee-item-changes__icon"></span>0%</div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/jpycoin" title="JPYC" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/9045.png" />
-                                                    </div>
-
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">JPYC</div>
-                                                            <div class="coin-marquee-item-price">$0.008176</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">JPYC</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--up"><span class="coin-marquee-item-changes__icon"></span>0.79%</div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/bitcny" title="bitCNY" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/624.png" />
-                                                    </div>
-
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">bitCNY</div>
-                                                            <div class="coin-marquee-item-price">$0.155883</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">BITCNY</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--down"><span class="coin-marquee-item-changes__icon"></span>-0.76%</div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/bitcoin-gold" title="Bitcoin Gold" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/2083.png" />
-                                                    </div>
-
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">Bitcoin Gold</div>
-                                                            <div class="coin-marquee-item-price">$27.78</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">BTG</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--down"><span class="coin-marquee-item-changes__icon"></span>-4.32%</div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/stasis-euro" title="STASIS EURO" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/2989.png" />
-                                                    </div>
-
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">STASIS EURO</div>
-                                                            <div class="coin-marquee-item-price">$1.14</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">EURS</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--up"><span class="coin-marquee-item-changes__icon"></span>0.39%</div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/usd-coin" title="USD Coin" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/3408.png" />
-                                                    </div>
-
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">USD Coin</div>
-                                                            <div class="coin-marquee-item-price">$1.00</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">USDC</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--down"><span class="coin-marquee-item-changes__icon"></span>-0.01%</div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/upper-pound" title="Upper Pound" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/6906.png" />
-                                                    </div>
-
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">Upper Pound</div>
-                                                            <div class="coin-marquee-item-price">$1.36</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">GBPU</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--down"><span class="coin-marquee-item-changes__icon"></span>0%</div>
-                                                        </div>
-                                                    </div>
-                                                </a>
-                                            </div>
-
-                                            <div class="coin-marquee-item">
-                                                <a class="coin-marquee-item-inner" href="https://coinmarketcap.com/currencies/jpycoin" title="JPYC" target="_blank">
-                                                    <div class="coin-marquee-item__icon">
-                                                        <img src="https://s2.coinmarketcap.com/static/img/coins/32x32/9045.png" />
-                                                    </div>
-
-                                                    <div class="coin-marquee-item-info">
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-name">JPYC</div>
-                                                            <div class="coin-marquee-item-price">$0.008176</div>
-                                                        </div>
-                                                        <div class="coin-marquee-item-info__row">
-                                                            <div class="coin-marquee-item-symbol">JPYC</div>
-                                                            <div class="coin-marquee-item-changes coin-marquee-item-changes--up"><span class="coin-marquee-item-changes__icon"></span>0.79%</div>
-                                                        </div>
-                                                    </div>
-                                                </a>
+                                                {% endfor %}
                                             </div>
                                         </div>
                                     </div>
