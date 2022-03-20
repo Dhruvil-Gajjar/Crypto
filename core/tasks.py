@@ -1,3 +1,4 @@
+import os
 import requests
 
 import pandas as pd
@@ -6,6 +7,7 @@ from datetime import date, timedelta, datetime
 from django.conf import settings
 
 from core.models import *
+from core.utils import predGoldPrice
 
 FIXER_BASE_URL = settings.FIXER_BASE_URL
 FIXER_ACCESS_KEY = settings.FIXER_ACCESS_KEY
@@ -120,5 +122,27 @@ def delete_tables_data():
         # a = model.objects.all().order_by('-dateTimeStamp').first().delete()
 
 
+# def test_data():
+    # final_csv = settings.BASE_DIR + "/" + 'final_predicted.csv'
+    # print(final_csv)
+    # pd_list = []
+    # queryset = Gold.objects.filter(predicted_price=None).order_by('dateTimeStamp')
+    # for obj in queryset:
+    #     pd_list.append({
+    #         'Date': obj.dateTimeStamp.strftime('%Y-%m-%d'),
+    #         'Price': float(str(obj.price).replace(",", ""))
+    #     })
+    #
+    # df = pd.DataFrame(pd_list)
+    # df.columns = ['ds', 'y']
+    # predGoldPrice(df)
+    # print(df)
+    # df = pd.DataFrame(list())
+
 # from core.tasks import ingest_price_data
 # from core.tasks import delete_tables_data
+# from core.tasks import test_data
+
+# df = pd.read_csv('gold_data_sept.csv')
+# df.columns=['ds','y']
+# predGoldPrice(df)
