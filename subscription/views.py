@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render, redirect
-from django.http.response import HttpResponseNotFound, JsonResponse, HttpResponse
+from django.http.response import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.views.generic import ListView, CreateView, DetailView, TemplateView
 
 from users.models import User
@@ -61,14 +61,17 @@ def create_checkout_session(request):
 
 @login_required
 def success(request):
-    stripe_customer = OrderDetail.objects.get(user=request.user, is_active=True)
-    stripe.api_key = settings.STRIPE_SECRET_KEY
-    subscription = stripe.Subscription.retrieve(stripe_customer.stripeSubscriptionId)
-    product = stripe.Product.retrieve(subscription.plan.product)
+    stripe_customer = OrderDetail.objects.filter(user=request.user, is_active=True).first()
+    if stripe_customer:
+        stripe.api_key = settings.STRIPE_SECRET_KEY
+        subscription = stripe.Subscription.retrieve(stripe_customer.stripeSubscriptionId)
+        product = stripe.Product.retrieve(subscription.plan.product)
 
-    return render(request, 'Subscriptions/success.html', {
-        'product': product,
-    })
+        return render(request, 'Subscriptions/success.html', {
+            'product': product,
+        })
+    else:
+        return HttpResponseRedirect(reverse('dashboard'))
 
 
 @login_required
