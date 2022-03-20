@@ -9,4 +9,11 @@ urlpatterns = [
     path('success/', success),
     path('cancel/', cancel),
     path('webhook/', stripe_webhook),
+
+    # List
+    path('products/list/', list_products, name='list_products'),
+
+    # Add/Edit
+    path('manage/product/', manage_product, name='add_product'),
+    path('manage/product/<uuid:uid>/', manage_product, name='edit_product'),
 ]

@@ -8,6 +8,7 @@ from core.resource import *
 # Gold
 class GoldAdmin(ImportExportModelAdmin):
     resource_class = GoldResource
+    ordering = ["-dateTimeStamp"]
 
 
 admin.site.register(Gold, GoldAdmin)
@@ -16,6 +17,7 @@ admin.site.register(Gold, GoldAdmin)
 # Euro
 class EuroAdmin(ImportExportModelAdmin):
     resource_class = EuroResource
+    ordering = ["-dateTimeStamp"]
     # form = EuroForm
 
 
@@ -25,6 +27,7 @@ admin.site.register(Euro, EuroAdmin)
 # JPY
 class JPYAdmin(ImportExportModelAdmin):
     resource_class = JPYResource
+    ordering = ["-dateTimeStamp"]
 
 
 admin.site.register(JPY, JPYAdmin)
@@ -33,6 +36,7 @@ admin.site.register(JPY, JPYAdmin)
 # CNY
 class CNYAdmin(ImportExportModelAdmin):
     resource_class = CNYResource
+    ordering = ["-dateTimeStamp"]
 
 
 admin.site.register(CNY, CNYAdmin)
@@ -41,6 +45,7 @@ admin.site.register(CNY, CNYAdmin)
 # GBP
 class GBPAdmin(ImportExportModelAdmin):
     resource_class = GBPResource
+    ordering = ["-dateTimeStamp"]
 
 
 admin.site.register(GBP, GBPAdmin)
