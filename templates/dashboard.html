@@ -7,6 +7,18 @@
 
 {% block extra_css %}
 <style>
+.card-img-sec {
+    display: inline-block;
+}
+.card-title-sec {
+    display: inline-block;
+    margin-left: 5px;
+}
+.card-img-sec img {
+    object-fit: contain;
+    width: 25px;
+}
+
  .apexcharts-toolbar {
     display:none !important;
 }
@@ -34,7 +46,6 @@
 }
  .scroll-left {
      height: 50px;
-     overflow: hidden;
      position: relative;
 }
  .scroll-left{
@@ -132,21 +143,23 @@
                                     <div class="left-sec">
                                         <div id="coin-marquee-container" class="coin-marquee-container scroll-left">
                                             <div class="coin-marquee-container__inner">
-                                                {% for trail in trails %}
+                                                {% for trail in cards %}
                                                     <div class="coin-marquee-item">
-                                                        <a class="coin-marquee-item-inner" href="#" title="bitCNY" target="_blank">
+                                                        <a class="coin-marquee-item-inner" href="#" title="{{ trail.commodity_name }}" target="_blank">
                                                             <div class="coin-marquee-item__icon">
                                                                 <img src="{{ trail.commodity_img }}" />
                                                             </div>
 
                                                             <div class="coin-marquee-item-info">
                                                                 <div class="coin-marquee-item-info__row">
-                                                                    <div class="coin-marquee-item-name">bitCNY</div>
+                                                                    <div class="coin-marquee-item-name">{{ trail.commodity_name }}</div>
                                                                     <div class="coin-marquee-item-price">${{ trail.price }}</div>
                                                                 </div>
                                                                 <div class="coin-marquee-item-info__row">
-                                                                    <div class="coin-marquee-item-symbol">BITCNY</div>
-                                                                    <div class="coin-marquee-item-changes coin-marquee-item-changes--down"><span class="coin-marquee-item-changes__icon"></span>-0.76%</div>
+                                                                    <div class="coin-marquee-item-symbol">CRYPTO</div>
+                                                                    <div class="coin-marquee-item-changes {% if '-' in trail.average %} coin-marquee-item-changes--down {% else %} coin-marquee-item-changes--up {% endif %}">
+                                                                        <span class="coin-marquee-item-changes__icon"></span>{{ trail.average}}%
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </a>
@@ -165,186 +178,40 @@
             <div class="row">
                 <div class="col-xl-12">
                     <div class="row">
+
+                        {% for card in cards %}
                         <div class="col-sm-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <p class="text-muted mb-4"><i class="mdi mdi-bitcoin h2 text-warning align-middle mb-0 me-3"></i> Gold</p>
+                                    <div class="row mb-2">
+                                        <div class="col-md-12">
+                                            <div class="card-img-sec">
+                                                <img src="{{card.commodity_img}}">
+                                            </div>
+                                            <div class="card-title-sec">
+                                                <p class="text-muted mb-1 mt-1">{{ card.commodity_name }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <div class="col-6">
                                             <div>
-                                                <h5>$ 9134.39</h5>
-                                                <p class="text-muted text-truncate mb-0">+ 0.0012 ( 0.2 % ) <i class="mdi mdi-arrow-up ms-1 text-success"></i></p>
+                                                <h5>$ {{ card.price }}</h5>
+                                                <p class="text-muted text-truncate mb-0"> {{ card.difference }} ( {{ card.average }} % ) <i class="mdi mdi-arrow-up ms-1 text-success"></i></p>
                                             </div>
                                         </div>
                                         <div class="col-6">
-                                            <div style="position: relative;">
-                                                <div id="area-sparkline-chart-1" class="apex-charts" style="min-height: 40px;">
-                                                    <div id="apexchartsrwbc05wj" class="apexcharts-canvas apexchartsrwbc05wj apexcharts-theme-light" style="width: 86px; height: 40px;">
-                                                        <svg id="SvgjsSvg1885" width="86" height="40" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;"> <g id="SvgjsG1887" class="apexcharts-inner apexcharts-graphical" transform="translate(0, 0)"> <defs id="SvgjsDefs1886"> <clipPath id="gridRectMaskrwbc05wj"> <rect id="SvgjsRect1892" width="92" height="42" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect> </clipPath> <clipPath id="gridRectMarkerMaskrwbc05wj"> <rect id="SvgjsRect1893" width="90" height="44" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect> </clipPath> <linearGradient id="SvgjsLinearGradient1898" x1="0" y1="0" x2="0" y2="1"> <stop id="SvgjsStop1899" stop-opacity="0.45" stop-color="rgba(241,180,76,0.45)" offset="0.25"></stop> <stop id="SvgjsStop1900" stop-opacity="0.05" stop-color="rgba(255,255,255,0.05)" offset="1"></stop> <stop id="SvgjsStop1901" stop-opacity="0.05" stop-color="rgba(255,255,255,0.05)" offset="1"></stop> <stop id="SvgjsStop1902" stop-opacity="0.45" stop-color="rgba(241,180,76,0.45)" offset="1"></stop> </linearGradient> </defs> <line id="SvgjsLine1891" x1="0" y1="0" x2="0" y2="40" stroke="#b6b6b6" stroke-dasharray="3" class="apexcharts-xcrosshairs" x="0" y="0" width="1" height="40" fill="#b1b9c4" filter="none" fill-opacity="0.9" stroke-width="1" ></line> <g id="SvgjsG1905" class="apexcharts-xaxis" transform="translate(0, 0)"><g id="SvgjsG1906" class="apexcharts-xaxis-texts-g" transform="translate(0, -4)"></g></g> <g id="SvgjsG1908" class="apexcharts-grid"> <g id="SvgjsG1909" class="apexcharts-gridlines-horizontal" style="display: none;"> <line id="SvgjsLine1911" x1="0" y1="0" x2="86" y2="0" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1912" x1="0" y1="10" x2="86" y2="10" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1913" x1="0" y1="20" x2="86" y2="20" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1914" x1="0" y1="30" x2="86" y2="30" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1915" x1="0" y1="40" x2="86" y2="40" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> </g> <g id="SvgjsG1910" class="apexcharts-gridlines-vertical" style="display: none;"></g> <line id="SvgjsLine1917" x1="0" y1="40" x2="86" y2="40" stroke="transparent" stroke-dasharray="0"></line> <line id="SvgjsLine1916" x1="0" y1="1" x2="0" y2="40" stroke="transparent" stroke-dasharray="0"></line> </g> <g id="SvgjsG1894" class="apexcharts-area-series apexcharts-plot-series"> <g id="SvgjsG1895" class="apexcharts-series" seriesName="BTC" data:longestSeries="true" rel="1" data:realIndex="0"> <path id="SvgjsPath1903" d="M 0 40L 0 34C 3.01 34 5.59 33 8.6 33C 11.61 33 14.19 39 17.2 39C 20.21 39 22.79 16.5 25.8 16.5C 28.81 16.5 31.39 19 34.4 19C 37.41 19 39.99 32.5 43 32.5C 46.01 32.5 48.59 16.5 51.6 16.5C 54.61 16.5 57.190000000000005 2.5 60.2 2.5C 63.21 2.5 65.78999999999999 7.5 68.8 7.5C 71.81 7.5 74.39 30.5 77.4 30.5C 80.41 30.5 82.99000000000001 33 86 33C 86 33 86 33 86 40M 86 33z" fill="url(#SvgjsLinearGradient1898)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="0" stroke-dasharray="0" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskrwbc05wj)" pathTo="M 0 40L 0 34C 3.01 34 5.59 33 8.6 33C 11.61 33 14.19 39 17.2 39C 20.21 39 22.79 16.5 25.8 16.5C 28.81 16.5 31.39 19 34.4 19C 37.41 19 39.99 32.5 43 32.5C 46.01 32.5 48.59 16.5 51.6 16.5C 54.61 16.5 57.190000000000005 2.5 60.2 2.5C 63.21 2.5 65.78999999999999 7.5 68.8 7.5C 71.81 7.5 74.39 30.5 77.4 30.5C 80.41 30.5 82.99000000000001 33 86 33C 86 33 86 33 86 40M 86 33z" pathFrom="M -1 40L -1 40L 8.6 40L 17.2 40L 25.8 40L 34.4 40L 43 40L 51.6 40L 60.2 40L 68.8 40L 77.4 40L 86 40" ></path> <path id="SvgjsPath1904" d="M 0 34C 3.01 34 5.59 33 8.6 33C 11.61 33 14.19 39 17.2 39C 20.21 39 22.79 16.5 25.8 16.5C 28.81 16.5 31.39 19 34.4 19C 37.41 19 39.99 32.5 43 32.5C 46.01 32.5 48.59 16.5 51.6 16.5C 54.61 16.5 57.190000000000005 2.5 60.2 2.5C 63.21 2.5 65.78999999999999 7.5 68.8 7.5C 71.81 7.5 74.39 30.5 77.4 30.5C 80.41 30.5 82.99000000000001 33 86 33" fill="none" fill-opacity="1" stroke="#f1b44c" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskrwbc05wj)" pathTo="M 0 34C 3.01 34 5.59 33 8.6 33C 11.61 33 14.19 39 17.2 39C 20.21 39 22.79 16.5 25.8 16.5C 28.81 16.5 31.39 19 34.4 19C 37.41 19 39.99 32.5 43 32.5C 46.01 32.5 48.59 16.5 51.6 16.5C 54.61 16.5 57.190000000000005 2.5 60.2 2.5C 63.21 2.5 65.78999999999999 7.5 68.8 7.5C 71.81 7.5 74.39 30.5 77.4 30.5C 80.41 30.5 82.99000000000001 33 86 33" pathFrom="M -1 40L -1 40L 8.6 40L 17.2 40L 25.8 40L 34.4 40L 43 40L 51.6 40L 60.2 40L 68.8 40L 77.4 40L 86 40" ></path> <g id="SvgjsG1896" class="apexcharts-series-markers-wrap" data:realIndex="0"> <g class="apexcharts-series-markers"> <circle id="SvgjsCircle1923" r="0" cx="0" cy="0" class="apexcharts-marker w3hig2v17 no-pointer-events" stroke="#ffffff" fill="#f1b44c" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" default-marker-size="0" ></circle> </g> </g> </g> <g id="SvgjsG1897" class="apexcharts-datalabels" data:realIndex="0"></g> </g> <line id="SvgjsLine1918" x1="0" y1="0" x2="86" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" class="apexcharts-ycrosshairs"></line> <line id="SvgjsLine1919" x1="0" y1="0" x2="86" y2="0" stroke-dasharray="0" stroke-width="0" class="apexcharts-ycrosshairs-hidden"></line> <g id="SvgjsG1920" class="apexcharts-yaxis-annotations"></g> <g id="SvgjsG1921" class="apexcharts-xaxis-annotations"></g> <g id="SvgjsG1922" class="apexcharts-point-annotations"></g> </g> <rect id="SvgjsRect1890" width="0" height="0" x="0" y="0" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fefefe"></rect> <g id="SvgjsG1907" class="apexcharts-yaxis" rel="0" transform="translate(-18, 0)"></g> <g id="SvgjsG1888" class="apexcharts-annotations"></g> </svg>
-                                                        <div class="apexcharts-legend" style="max-height: 20px;"></div>
-                                                        <div class="apexcharts-tooltip apexcharts-theme-light">
-                                                            <div class="apexcharts-tooltip-series-group" style="order: 1;">
-                                                                <span class="apexcharts-tooltip-marker" style="background-color: rgb(241, 180, 76);"></span>
-                                                                <div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">
-                                                                    <div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label"></span><span class="apexcharts-tooltip-text-value"></span></div>
-                                                                    <div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="apexcharts-yaxistooltip apexcharts-yaxistooltip-0 apexcharts-yaxistooltip-left apexcharts-theme-light"><div class="apexcharts-yaxistooltip-text"></div></div>
-                                                    </div>
-                                                </div>
-                                                <div class="resize-triggers">
-                                                    <div class="expand-trigger"><div style="width: 87px; height: 41px;"></div></div>
-                                                    <div class="contract-trigger"></div>
-                                                </div>
+                                            <div>
+                                                <div id="line-chart-{{ card.commodity_name }}" class="apex-charts"></div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-sm-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="text-muted mb-4"><i class="mdi mdi-ethereum h2 text-primary align-middle mb-0 me-3"></i> Ethereum</p>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div>
-                                                <h5>$ 245.44</h5>
-                                                <p class="text-muted text-truncate mb-0">- 4.102 ( 0.1 % ) <i class="mdi mdi-arrow-down ms-1 text-danger"></i></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div style="position: relative;">
-                                                <div id="area-sparkline-chart-2" class="apex-charts" style="min-height: 40px;">
-                                                    <div id="apexchartsao61s2ifk" class="apexcharts-canvas apexchartsao61s2ifk apexcharts-theme-light" style="width: 86px; height: 40px;">
-                                                        <svg id="SvgjsSvg1925" width="86" height="40" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;" > <g id="SvgjsG1927" class="apexcharts-inner apexcharts-graphical" transform="translate(0, 0)"> <defs id="SvgjsDefs1926"> <clipPath id="gridRectMaskao61s2ifk"> <rect id="SvgjsRect1932" width="92" height="42" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect> </clipPath> <clipPath id="gridRectMarkerMaskao61s2ifk"> <rect id="SvgjsRect1933" width="90" height="44" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect> </clipPath> <linearGradient id="SvgjsLinearGradient1938" x1="0" y1="0" x2="0" y2="1"> <stop id="SvgjsStop1939" stop-opacity="0.45" stop-color="rgba(52,82,225,0.45)" offset="0.25"></stop> <stop id="SvgjsStop1940" stop-opacity="0.05" stop-color="rgba(255,255,255,0.05)" offset="1"></stop> <stop id="SvgjsStop1941" stop-opacity="0.05" stop-color="rgba(255,255,255,0.05)" offset="1"></stop> <stop id="SvgjsStop1942" stop-opacity="0.45" stop-color="rgba(52,82,225,0.45)" offset="1"></stop> </linearGradient> </defs> <line id="SvgjsLine1931" x1="0" y1="0" x2="0" y2="40" stroke="#b6b6b6" stroke-dasharray="3" class="apexcharts-xcrosshairs" x="0" y="0" width="1" height="40" fill="#b1b9c4" filter="none" fill-opacity="0.9" stroke-width="1" ></line> <g id="SvgjsG1945" class="apexcharts-xaxis" transform="translate(0, 0)"><g id="SvgjsG1946" class="apexcharts-xaxis-texts-g" transform="translate(0, -4)"></g></g> <g id="SvgjsG1948" class="apexcharts-grid"> <g id="SvgjsG1949" class="apexcharts-gridlines-horizontal" style="display: none;"> <line id="SvgjsLine1951" x1="0" y1="0" x2="86" y2="0" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1952" x1="0" y1="8" x2="86" y2="8" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1953" x1="0" y1="16" x2="86" y2="16" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1954" x1="0" y1="24" x2="86" y2="24" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1955" x1="0" y1="32" x2="86" y2="32" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1956" x1="0" y1="40" x2="86" y2="40" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> </g> <g id="SvgjsG1950" class="apexcharts-gridlines-vertical" style="display: none;"></g> <line id="SvgjsLine1958" x1="0" y1="40" x2="86" y2="40" stroke="transparent" stroke-dasharray="0"></line> <line id="SvgjsLine1957" x1="0" y1="1" x2="0" y2="40" stroke="transparent" stroke-dasharray="0"></line> </g> <g id="SvgjsG1934" class="apexcharts-area-series apexcharts-plot-series"> <g id="SvgjsG1935" class="apexcharts-series" seriesName="ETH" data:longestSeries="true" rel="1" data:realIndex="0"> <path id="SvgjsPath1943" d="M 0 40L 0 30C 3.01 30 5.59 13.600000000000001 8.6 13.600000000000001C 11.61 13.600000000000001 14.19 23.6 17.2 23.6C 20.21 23.6 22.79 4.399999999999999 25.8 4.399999999999999C 28.81 4.399999999999999 31.39 14.8 34.4 14.8C 37.41 14.8 39.99 30 43 30C 46.01 30 48.59 22.4 51.6 22.4C 54.61 22.4 57.190000000000005 35.2 60.2 35.2C 63.21 35.2 65.78999999999999 25.6 68.8 25.6C 71.81 25.6 74.39 36.4 77.4 36.4C 80.41 36.4 82.99000000000001 18.4 86 18.4C 86 18.4 86 18.4 86 40M 86 18.4z" fill="url(#SvgjsLinearGradient1938)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="0" stroke-dasharray="0" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskao61s2ifk)" pathTo="M 0 40L 0 30C 3.01 30 5.59 13.600000000000001 8.6 13.600000000000001C 11.61 13.600000000000001 14.19 23.6 17.2 23.6C 20.21 23.6 22.79 4.399999999999999 25.8 4.399999999999999C 28.81 4.399999999999999 31.39 14.8 34.4 14.8C 37.41 14.8 39.99 30 43 30C 46.01 30 48.59 22.4 51.6 22.4C 54.61 22.4 57.190000000000005 35.2 60.2 35.2C 63.21 35.2 65.78999999999999 25.6 68.8 25.6C 71.81 25.6 74.39 36.4 77.4 36.4C 80.41 36.4 82.99000000000001 18.4 86 18.4C 86 18.4 86 18.4 86 40M 86 18.4z" pathFrom="M -1 40L -1 40L 8.6 40L 17.2 40L 25.8 40L 34.4 40L 43 40L 51.6 40L 60.2 40L 68.8 40L 77.4 40L 86 40" ></path> <path id="SvgjsPath1944" d="M 0 30C 3.01 30 5.59 13.600000000000001 8.6 13.600000000000001C 11.61 13.600000000000001 14.19 23.6 17.2 23.6C 20.21 23.6 22.79 4.399999999999999 25.8 4.399999999999999C 28.81 4.399999999999999 31.39 14.8 34.4 14.8C 37.41 14.8 39.99 30 43 30C 46.01 30 48.59 22.4 51.6 22.4C 54.61 22.4 57.190000000000005 35.2 60.2 35.2C 63.21 35.2 65.78999999999999 25.6 68.8 25.6C 71.81 25.6 74.39 36.4 77.4 36.4C 80.41 36.4 82.99000000000001 18.4 86 18.4" fill="none" fill-opacity="1" stroke="#3452e1" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskao61s2ifk)" pathTo="M 0 30C 3.01 30 5.59 13.600000000000001 8.6 13.600000000000001C 11.61 13.600000000000001 14.19 23.6 17.2 23.6C 20.21 23.6 22.79 4.399999999999999 25.8 4.399999999999999C 28.81 4.399999999999999 31.39 14.8 34.4 14.8C 37.41 14.8 39.99 30 43 30C 46.01 30 48.59 22.4 51.6 22.4C 54.61 22.4 57.190000000000005 35.2 60.2 35.2C 63.21 35.2 65.78999999999999 25.6 68.8 25.6C 71.81 25.6 74.39 36.4 77.4 36.4C 80.41 36.4 82.99000000000001 18.4 86 18.4" pathFrom="M -1 40L -1 40L 8.6 40L 17.2 40L 25.8 40L 34.4 40L 43 40L 51.6 40L 60.2 40L 68.8 40L 77.4 40L 86 40" ></path> <g id="SvgjsG1936" class="apexcharts-series-markers-wrap" data:realIndex="0"> <g class="apexcharts-series-markers"> <circle id="SvgjsCircle1964" r="0" cx="0" cy="0" class="apexcharts-marker wuckapj6m no-pointer-events" stroke="#ffffff" fill="#3452e1" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" default-marker-size="0" ></circle> </g> </g> </g> <g id="SvgjsG1937" class="apexcharts-datalabels" data:realIndex="0"></g> </g> <line id="SvgjsLine1959" x1="0" y1="0" x2="86" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" class="apexcharts-ycrosshairs"></line> <line id="SvgjsLine1960" x1="0" y1="0" x2="86" y2="0" stroke-dasharray="0" stroke-width="0" class="apexcharts-ycrosshairs-hidden"></line> <g id="SvgjsG1961" class="apexcharts-yaxis-annotations"></g> <g id="SvgjsG1962" class="apexcharts-xaxis-annotations"></g> <g id="SvgjsG1963" class="apexcharts-point-annotations"></g> </g> <rect id="SvgjsRect1930" width="0" height="0" x="0" y="0" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fefefe"></rect> <g id="SvgjsG1947" class="apexcharts-yaxis" rel="0" transform="translate(-18, 0)"></g> <g id="SvgjsG1928" class="apexcharts-annotations"></g> </svg>
-                                                        <div class="apexcharts-legend" style="max-height: 20px;"></div>
-                                                        <div class="apexcharts-tooltip apexcharts-theme-light">
-                                                            <div class="apexcharts-tooltip-series-group" style="order: 1;">
-                                                                <span class="apexcharts-tooltip-marker" style="background-color: rgb(52, 82, 225);"></span>
-                                                                <div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">
-                                                                    <div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label"></span><span class="apexcharts-tooltip-text-value"></span></div>
-                                                                    <div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="apexcharts-yaxistooltip apexcharts-yaxistooltip-0 apexcharts-yaxistooltip-left apexcharts-theme-light"><div class="apexcharts-yaxistooltip-text"></div></div>
-                                                    </div>
-                                                </div>
-                                                <div class="resize-triggers">
-                                                    <div class="expand-trigger"><div style="width: 87px; height: 41px;"></div></div>
-                                                    <div class="contract-trigger"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="text-muted mb-4"><i class="mdi mdi-litecoin h2 text-info align-middle mb-0 me-3"></i> Litecoin</p>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div>
-                                                <h5>$ 63.61</h5>
-                                                <p class="text-muted text-truncate mb-0">+ 1.792 ( 0.1 % ) <i class="mdi mdi-arrow-up ms-1 text-success"></i></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div style="position: relative;">
-                                                <div id="area-sparkline-chart-3" class="apex-charts" style="min-height: 40px;">
-                                                    <div id="apexchartsgop5tqonh" class="apexcharts-canvas apexchartsgop5tqonh apexcharts-theme-light" style="width: 86px; height: 40px;">
-                                                        <svg id="SvgjsSvg1966" width="86" height="40" xmlns="http://www.w3.org/2000/svg" version="1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:svgjs="http://svgjs.com/svgjs" class="apexcharts-svg" xmlns:data="ApexChartsNS" transform="translate(0, 0)" style="background: transparent;" > <g id="SvgjsG1968" class="apexcharts-inner apexcharts-graphical" transform="translate(0, 0)"> <defs id="SvgjsDefs1967"> <clipPath id="gridRectMaskgop5tqonh"> <rect id="SvgjsRect1973" width="92" height="42" x="-3" y="-1" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect> </clipPath> <clipPath id="gridRectMarkerMaskgop5tqonh"> <rect id="SvgjsRect1974" width="90" height="44" x="-2" y="-2" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fff"></rect> </clipPath> <linearGradient id="SvgjsLinearGradient1979" x1="0" y1="0" x2="0" y2="1"> <stop id="SvgjsStop1980" stop-opacity="0.45" stop-color="rgba(80,165,241,0.45)" offset="0.25"></stop> <stop id="SvgjsStop1981" stop-opacity="0.05" stop-color="rgba(255,255,255,0.05)" offset="1"></stop> <stop id="SvgjsStop1982" stop-opacity="0.05" stop-color="rgba(255,255,255,0.05)" offset="1"></stop> <stop id="SvgjsStop1983" stop-opacity="0.45" stop-color="rgba(80,165,241,0.45)" offset="1"></stop> </linearGradient> </defs> <line id="SvgjsLine1972" x1="0" y1="0" x2="0" y2="40" stroke="#b6b6b6" stroke-dasharray="3" class="apexcharts-xcrosshairs" x="0" y="0" width="1" height="40" fill="#b1b9c4" filter="none" fill-opacity="0.9" stroke-width="1" ></line> <g id="SvgjsG1986" class="apexcharts-xaxis" transform="translate(0, 0)"><g id="SvgjsG1987" class="apexcharts-xaxis-texts-g" transform="translate(0, -4)"></g></g> <g id="SvgjsG1989" class="apexcharts-grid"> <g id="SvgjsG1990" class="apexcharts-gridlines-horizontal" style="display: none;"> <line id="SvgjsLine1992" x1="0" y1="0" x2="86" y2="0" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1993" x1="0" y1="8" x2="86" y2="8" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1994" x1="0" y1="16" x2="86" y2="16" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1995" x1="0" y1="24" x2="86" y2="24" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1996" x1="0" y1="32" x2="86" y2="32" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> <line id="SvgjsLine1997" x1="0" y1="40" x2="86" y2="40" stroke="#e0e0e0" stroke-dasharray="0" class="apexcharts-gridline"></line> </g> <g id="SvgjsG1991" class="apexcharts-gridlines-vertical" style="display: none;"></g> <line id="SvgjsLine1999" x1="0" y1="40" x2="86" y2="40" stroke="transparent" stroke-dasharray="0"></line> <line id="SvgjsLine1998" x1="0" y1="1" x2="0" y2="40" stroke="transparent" stroke-dasharray="0"></line> </g> <g id="SvgjsG1975" class="apexcharts-area-series apexcharts-plot-series"> <g id="SvgjsG1976" class="apexcharts-series" seriesName="LTC" data:longestSeries="true" rel="1" data:realIndex="0"> <path id="SvgjsPath1984" d="M 0 40L 0 26C 3.01 26 5.59 18.8 8.6 18.8C 11.61 18.8 14.19 2.799999999999997 17.2 2.799999999999997C 20.21 2.799999999999997 22.79 21.2 25.8 21.2C 28.81 21.2 31.39 18.4 34.4 18.4C 37.41 18.4 39.99 30.4 43 30.4C 46.01 30.4 48.59 21.2 51.6 21.2C 54.61 21.2 57.190000000000005 10 60.2 10C 63.21 10 65.78999999999999 14 68.8 14C 71.81 14 74.39 32.4 77.4 32.4C 80.41 32.4 82.99000000000001 34.4 86 34.4C 86 34.4 86 34.4 86 40M 86 34.4z" fill="url(#SvgjsLinearGradient1979)" fill-opacity="1" stroke-opacity="1" stroke-linecap="butt" stroke-width="0" stroke-dasharray="0" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskgop5tqonh)" pathTo="M 0 40L 0 26C 3.01 26 5.59 18.8 8.6 18.8C 11.61 18.8 14.19 2.799999999999997 17.2 2.799999999999997C 20.21 2.799999999999997 22.79 21.2 25.8 21.2C 28.81 21.2 31.39 18.4 34.4 18.4C 37.41 18.4 39.99 30.4 43 30.4C 46.01 30.4 48.59 21.2 51.6 21.2C 54.61 21.2 57.190000000000005 10 60.2 10C 63.21 10 65.78999999999999 14 68.8 14C 71.81 14 74.39 32.4 77.4 32.4C 80.41 32.4 82.99000000000001 34.4 86 34.4C 86 34.4 86 34.4 86 40M 86 34.4z" pathFrom="M -1 40L -1 40L 8.6 40L 17.2 40L 25.8 40L 34.4 40L 43 40L 51.6 40L 60.2 40L 68.8 40L 77.4 40L 86 40" ></path> <path id="SvgjsPath1985" d="M 0 26C 3.01 26 5.59 18.8 8.6 18.8C 11.61 18.8 14.19 2.799999999999997 17.2 2.799999999999997C 20.21 2.799999999999997 22.79 21.2 25.8 21.2C 28.81 21.2 31.39 18.4 34.4 18.4C 37.41 18.4 39.99 30.4 43 30.4C 46.01 30.4 48.59 21.2 51.6 21.2C 54.61 21.2 57.190000000000005 10 60.2 10C 63.21 10 65.78999999999999 14 68.8 14C 71.81 14 74.39 32.4 77.4 32.4C 80.41 32.4 82.99000000000001 34.4 86 34.4" fill="none" fill-opacity="1" stroke="#50a5f1" stroke-opacity="1" stroke-linecap="butt" stroke-width="2" stroke-dasharray="0" class="apexcharts-area" index="0" clip-path="url(#gridRectMaskgop5tqonh)" pathTo="M 0 26C 3.01 26 5.59 18.8 8.6 18.8C 11.61 18.8 14.19 2.799999999999997 17.2 2.799999999999997C 20.21 2.799999999999997 22.79 21.2 25.8 21.2C 28.81 21.2 31.39 18.4 34.4 18.4C 37.41 18.4 39.99 30.4 43 30.4C 46.01 30.4 48.59 21.2 51.6 21.2C 54.61 21.2 57.190000000000005 10 60.2 10C 63.21 10 65.78999999999999 14 68.8 14C 71.81 14 74.39 32.4 77.4 32.4C 80.41 32.4 82.99000000000001 34.4 86 34.4" pathFrom="M -1 40L -1 40L 8.6 40L 17.2 40L 25.8 40L 34.4 40L 43 40L 51.6 40L 60.2 40L 68.8 40L 77.4 40L 86 40" ></path> <g id="SvgjsG1977" class="apexcharts-series-markers-wrap" data:realIndex="0"> <g class="apexcharts-series-markers"> <circle id="SvgjsCircle2005" r="0" cx="0" cy="0" class="apexcharts-marker whr7a93m4 no-pointer-events" stroke="#ffffff" fill="#50a5f1" fill-opacity="1" stroke-width="2" stroke-opacity="0.9" default-marker-size="0" ></circle> </g> </g> </g> <g id="SvgjsG1978" class="apexcharts-datalabels" data:realIndex="0"></g> </g> <line id="SvgjsLine2000" x1="0" y1="0" x2="86" y2="0" stroke="#b6b6b6" stroke-dasharray="0" stroke-width="1" class="apexcharts-ycrosshairs"></line> <line id="SvgjsLine2001" x1="0" y1="0" x2="86" y2="0" stroke-dasharray="0" stroke-width="0" class="apexcharts-ycrosshairs-hidden"></line> <g id="SvgjsG2002" class="apexcharts-yaxis-annotations"></g> <g id="SvgjsG2003" class="apexcharts-xaxis-annotations"></g> <g id="SvgjsG2004" class="apexcharts-point-annotations"></g> </g> <rect id="SvgjsRect1971" width="0" height="0" x="0" y="0" rx="0" ry="0" opacity="1" stroke-width="0" stroke="none" stroke-dasharray="0" fill="#fefefe"></rect> <g id="SvgjsG1988" class="apexcharts-yaxis" rel="0" transform="translate(-18, 0)"></g> <g id="SvgjsG1969" class="apexcharts-annotations"></g> </svg>
-                                                        <div class="apexcharts-legend" style="max-height: 20px;"></div>
-                                                        <div class="apexcharts-tooltip apexcharts-theme-light">
-                                                            <div class="apexcharts-tooltip-series-group" style="order: 1;">
-                                                                <span class="apexcharts-tooltip-marker" style="background-color: rgb(80, 165, 241);"></span>
-                                                                <div class="apexcharts-tooltip-text" style="font-family: Helvetica, Arial, sans-serif; font-size: 12px;">
-                                                                    <div class="apexcharts-tooltip-y-group"><span class="apexcharts-tooltip-text-label"></span><span class="apexcharts-tooltip-text-value"></span></div>
-                                                                    <div class="apexcharts-tooltip-z-group"><span class="apexcharts-tooltip-text-z-label"></span><span class="apexcharts-tooltip-text-z-value"></span></div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="apexcharts-yaxistooltip apexcharts-yaxistooltip-0 apexcharts-yaxistooltip-left apexcharts-theme-light"><div class="apexcharts-yaxistooltip-text"></div></div>
-                                                    </div>
-                                                </div>
-                                                <div class="resize-triggers">
-                                                    <div class="expand-trigger"><div style="width: 87px; height: 41px;"></div></div>
-                                                    <div class="contract-trigger"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="text-muted mb-4">
-                                        <i class="mdi mdi-bitcoin h2 text-warning align-middle mb-0 me-3"></i>
-                                        USD Coin
-                                    </p>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div>
-                                                <h5>$ 9134.39</h5>
-                                                <p class="text-muted text-truncate mb-0">+ 0.0012 ( 0.2 % ) <i class="mdi mdi-arrow-up ms-1 text-success"></i></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div>
-                                                <div id="area-sparkline-chart-1" class="apex-charts"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="text-muted mb-4"><i class="mdi mdi-ethereum h2 text-primary align-middle mb-0 me-3"></i> GPY</p>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div>
-                                                <h5>$ 245.44</h5>
-                                                <p class="text-muted text-truncate mb-0">- 4.102 ( 0.1 % ) <i class="mdi mdi-arrow-down ms-1 text-danger"></i></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div>
-                                                <div id="area-sparkline-chart-2" class="apex-charts"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="text-muted mb-4"><i class="mdi mdi-litecoin h2 text-info align-middle mb-0 me-3"></i> CNY</p>
-                                    <div class="row">
-                                        <div class="col-6">
-                                            <div>
-                                                <h5>$ 63.61</h5>
-                                                <p class="text-muted text-truncate mb-0">+ 1.792 ( 0.1 % ) <i class="mdi mdi-arrow-up ms-1 text-success"></i></p>
-                                            </div>
-                                        </div>
-                                        <div class="col-6">
-                                            <div>
-                                                <div id="area-sparkline-chart-3" class="apex-charts"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        {% endfor %}
+
+
                     </div>
                 </div>
             </div>
@@ -375,7 +242,7 @@
                           </div>
                           <div class="card-body">
                             <div class="chart">
-                                <div id="line-chart"></div>
+                                <div id="chart-timeline2"></div>
                             </div>
                           </div>
                        </div>
@@ -413,7 +280,7 @@
 {% block extra_js %}
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-<script>
+<script type="text/javascript">
    var options = {
           series: [{
           data: {{ sparklines.data }}
@@ -454,10 +321,6 @@
           }
         },
         };
-
-        var chart = new ApexCharts(document.querySelector("#chart-timeline"), options);
-        chart.render();
-
 
         var resetCssClasses = function(activeEl) {
         var els = document.querySelectorAll('button')
@@ -516,6 +379,320 @@
           new Date().getTime()
         )
       })
+
+
+        var options1 = {
+          series: [{
+            name: "Session Duration",
+            data: [45, 52, 38, 24, 33, 26, 21, 20, 6, 8, 15, 10]
+          },
+          {
+            name: "Page Views",
+            data: [35, 41, 62, 42, 13, 18, 29, 37, 36, 51, 32, 35]
+          },
+          {
+            name: 'Total Visits',
+            data: [87, 57, 74, 99, 75, 38, 62, 47, 82, 56, 45, 47]
+          }
+        ],
+          chart: {
+          height: 350,
+          type: 'line',
+          zoom: {
+            enabled: false
+          },
+        },
+        dataLabels: {
+          enabled: false
+        },
+        stroke: {
+          width: [5, 7, 5],
+          curve: 'straight',
+          dashArray: [0, 8, 5]
+        },
+        title: {
+          text: 'Page Statistics',
+          align: 'left'
+        },
+        legend: {
+          tooltipHoverFormatter: function(val, opts) {
+            return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
+          }
+        },
+        markers: {
+          size: 0,
+          hover: {
+            sizeOffset: 6
+          }
+        },
+        xaxis: {
+          categories: ['01 Jan', '02 Jan', '03 Jan', '04 Jan', '05 Jan', '06 Jan', '07 Jan', '08 Jan', '09 Jan',
+            '10 Jan', '11 Jan', '12 Jan'
+          ],
+        },
+        tooltip: {
+          y: [
+            {
+              title: {
+                formatter: function (val) {
+                  return val + " (mins)"
+                }
+              }
+            },
+            {
+              title: {
+                formatter: function (val) {
+                  return val + " per session"
+                }
+              }
+            },
+            {
+              title: {
+                formatter: function (val) {
+                  return val;
+                }
+              }
+            }
+          ]
+        },
+        grid: {
+          borderColor: '#f1f1f1',
+        }
+        };
+
+        var chart = new ApexCharts(document.querySelector("#chart-timeline"), options);
+        chart.render();
+
+        var chart1 = new ApexCharts(document.querySelector("#chart-timeline2"), options1);
+        chart1.render();
+
+</script>
+
+
+<script type="text/javascript">
+
+     var chart_data1 = {
+          series: [{
+          data: {{ cards_chart.GOLD }}
+        }],
+          chart: {
+          type: 'area',
+          width: 100,
+          height: 35,
+          sparkline: {
+            enabled: true
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.9,
+            stops: [0, 100]
+          }
+        },
+        tooltip: {
+          fixed: {
+            enabled: false
+          },
+          x: {
+            show: false
+          },
+          y: {
+            title: {
+              formatter: function (seriesName) {
+                return ''
+              }
+            }
+          },
+          marker: {
+            show: true
+          }
+        }
+        };
+
+        var chart_data2 = {
+          series: [{
+          data: {{ cards_chart.EURO }}
+        }],
+          chart: {
+          type: 'area',
+          width: 100,
+          height: 35,
+          sparkline: {
+            enabled: true
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.9,
+            stops: [0, 100]
+          }
+        },
+        tooltip: {
+          fixed: {
+            enabled: false
+          },
+          x: {
+            show: false
+          },
+          y: {
+            title: {
+              formatter: function (seriesName) {
+                return ''
+              }
+            }
+          },
+          marker: {
+            show: true
+          }
+        }
+        };
+
+        var chart_data3 = {
+          series: [{
+          data: {{ cards_chart.JPY }}
+        }],
+          chart: {
+          type: 'area',
+          width: 100,
+          height: 35,
+          sparkline: {
+            enabled: true
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.9,
+            stops: [0, 100]
+          }
+        },
+        tooltip: {
+          fixed: {
+            enabled: false
+          },
+          x: {
+            show: false
+          },
+          y: {
+            title: {
+              formatter: function (seriesName) {
+                return ''
+              }
+            }
+          },
+          marker: {
+            show: true
+          }
+        }
+        };
+
+        var chart_data4 = {
+          series: [{
+          data: {{ cards_chart.CNY }}
+        }],
+          chart: {
+          type: 'area',
+          width: 100,
+          height: 35,
+          sparkline: {
+            enabled: true
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.9,
+            stops: [0, 100]
+          }
+        },
+        tooltip: {
+          fixed: {
+            enabled: false
+          },
+          x: {
+            show: false
+          },
+          y: {
+            title: {
+              formatter: function (seriesName) {
+                return ''
+              }
+            }
+          },
+          marker: {
+            show: true
+          }
+        }
+        };
+
+        var chart_data5 = {
+          series: [{
+          data: {{ cards_chart.GBP }}
+        }],
+          chart: {
+          type: 'area',
+          width: 100,
+          height: 35,
+          sparkline: {
+            enabled: true
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.9,
+            stops: [0, 100]
+          }
+        },
+        tooltip: {
+          fixed: {
+            enabled: false
+          },
+          x: {
+            show: false
+          },
+          y: {
+            title: {
+              formatter: function (seriesName) {
+                return ''
+              }
+            }
+          },
+          marker: {
+            show: true
+          }
+        }
+        };
+
+
+
+    var chart1 = new ApexCharts(document.querySelector("#line-chart-GOLD"), chart_data1);
+        chart1.render();
+
+    var chart2 = new ApexCharts(document.querySelector("#line-chart-EURO"), chart_data2);
+        chart2.render();
+
+    var chart3 = new ApexCharts(document.querySelector("#line-chart-JPY"), chart_data3);
+        chart3.render();
+
+    var chart4 = new ApexCharts(document.querySelector("#line-chart-CNY"), chart_data4);
+        chart4.render();
+
+    var chart5 = new ApexCharts(document.querySelector("#line-chart-GBP"), chart_data5);
+        chart5.render();
+
 
 </script>
 {% endblock %}

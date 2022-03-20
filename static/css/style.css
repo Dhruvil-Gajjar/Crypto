@@ -141,9 +141,10 @@ a.coin-marquee-item-inner {padding: 16px 0;display: flex;width: 100%;align-items
 }
 
 .coin-marquee-item-name, .coin-marquee-item-price {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 1;
     font-weight: 600;
+    margin-bottom:5px;
 }
 
 .coin-marquee-item-name {
@@ -161,6 +162,16 @@ a.coin-marquee-item-inner {padding: 16px 0;display: flex;width: 100%;align-items
 .coin-marquee-item-changes--down {
     color: #ea3943;
 }
+
+.coin-marquee-item-changes--up {
+    color: #16c784;
+}
+
+.coin-marquee-item-changes--up .coin-marquee-item-changes__icon {
+    top: -8px;
+    border-bottom: 5px solid #16c784;
+}
+
 
 .coin-marquee-item-changes {
     font-size: 12px;
@@ -205,9 +216,8 @@ a.coin-marquee-item-inner {padding: 16px 0;display: flex;width: 100%;align-items
 .coin-marquee-header-signature div {
     height: 17px;
     display: inline-block;
-    line-height: 18x;
     font-weight: 400;
-    font-size: 9px;
+    font-size: 14px;
     line-height: 18px;
     color: #808a9d;
 }

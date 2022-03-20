@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from users.models import User
 from subscription.models import OrderDetail
-from core.utils import get_trail, get_cards_data, get_last_ten_days_chart, get_sparkline, get_prediction
+from core.utils import get_cards_data, get_last_ten_days_chart, get_sparkline, get_prediction
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
