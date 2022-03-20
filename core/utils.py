@@ -10,6 +10,7 @@ from fbprophet.plot import plot_plotly
 from datetime import datetime
 from core.models import *
 
+
 gold_obj = Gold.objects.all().order_by('-dateTimeStamp').first()
 euro_obj = Euro.objects.all().order_by('-dateTimeStamp').first()
 jpy_obj = JPY.objects.all().order_by('-dateTimeStamp').first()
@@ -17,39 +18,15 @@ cny_obj = CNY.objects.all().order_by('-dateTimeStamp').first()
 gbp_obj = GBP.objects.all().order_by('-dateTimeStamp').first()
 
 
-def get_trail():
-    trail = [
-        {
-            "price": gold_obj.price if gold_obj else 0,
-            "commodity_name": "GOLD",
-            "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/624.png"
-        },
-        {
-            "price": euro_obj.price if euro_obj else 0,
-            "commodity_name": "EURO",
-            "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/2083.png"
-        },
-        {
-            "price": jpy_obj.price if jpy_obj else 0,
-            "commodity_name": "JPY",
-            "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/2989.png"
-        },
-        {
-            "price": cny_obj.price if cny_obj else 0,
-            "commodity_name": "CNY",
-            "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/3408.png"
-        },
-        {
-            "price": gbp_obj.price if gbp_obj else 0,
-            "commodity_name": "GBP",
-            "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/6906.png"
-        }
-    ]
+def get_price(value):
+    if "," in str(value):
+        new_value = str(value).replace(",", "")
+        return new_value
 
-    return trail
+    return value
 
 
-def calculate_difference(model_name):
+def get_values_list(model_name):
     queryset = model_name.objects.filter(predicted_price=None).order_by('-dateTimeStamp')
     values_list = []
     for obj in queryset[:2]:
@@ -59,20 +36,27 @@ def calculate_difference(model_name):
     new_value = values_list[0]
     old_value = values_list[1]
 
+    if "," in str(new_value):
+        new_value = str(new_value).replace(",", "")
+    if "," in str(old_value):
+        old_value = str(old_value).replace(",", "")
+
+    return new_value, old_value
+
+
+def calculate_difference(model_name):
+    new_value, old_value = get_values_list(model_name)
+
     difference = float(new_value) - float(old_value)
     return float('%.3f' % difference)
 
 
 def calculate_average(model_name):
-    queryset = model_name.objects.filter(predicted_price=None).order_by('-dateTimeStamp')
-    values_list = []
-    for obj in queryset[:2]:
-        values_list.append(obj.price)
+    new_value, old_value = get_values_list(model_name)
 
-    new_value = values_list[0]
-    old_value = values_list[1]
     difference = float(new_value) - float(old_value)
     average = float(difference) / float(old_value)
+
     if average > float(old_value):
         final_average = "+" + str(float('%.3f' % average))
     else:
@@ -85,35 +69,35 @@ def get_cards_data():
     data = [
         {
             "commodity_name": "GOLD",
-            "price": gold_obj.price if gold_obj else 0,
+            "price": get_price(gold_obj.price) if gold_obj else 0,
             "difference": calculate_difference(Gold),
             "average": calculate_average(Gold),
             "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/624.png"
         },
         {
             "commodity_name": "EURO",
-            "price": euro_obj.price if euro_obj else 0,
+            "price": get_price(euro_obj.price) if euro_obj else 0,
             "difference": calculate_difference(Euro),
             "average": calculate_average(Euro),
             "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/2083.png"
         },
         {
             "commodity_name": "JPY",
-            "price": jpy_obj.price if jpy_obj else 0,
+            "price": get_price(jpy_obj.price) if jpy_obj else 0,
             "difference": calculate_difference(JPY),
             "average": calculate_average(JPY),
             "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/2989.png"
         },
         {
             "commodity_name": "CNY",
-            "price": cny_obj.price if cny_obj else 0,
+            "price": get_price(cny_obj.price) if cny_obj else 0,
             "difference": calculate_difference(CNY),
             "average": calculate_average(CNY),
             "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/3408.png"
         },
         {
             "commodity_name": "GBP",
-            "price": gbp_obj.price if gbp_obj else 0,
+            "price": get_price(gbp_obj.price) if gbp_obj else 0,
             "difference": calculate_difference(GBP),
             "average": calculate_average(GBP),
             "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/6906.png"

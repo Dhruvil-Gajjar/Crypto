@@ -26,9 +26,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 except Exception as e:
                     print(e)
 
-            # Get Trail
-            trails = get_trail()
-
             # Get Cards
             cards = get_cards_data()
             cards_chart = get_last_ten_days_chart()
@@ -39,7 +36,6 @@ class DashboardView(LoginRequiredMixin, TemplateView):
 
             context.update({
                 'subscription': subscription,
-                'trails': trails,
                 'cards': cards,
                 'cards_chart': cards_chart,
                 'sparklines': sparklines,
