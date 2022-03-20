@@ -53,12 +53,14 @@ def calculate_difference(model_name):
     queryset = model_name.objects.filter(predicted_price=None).order_by('-dateTimeStamp')
     values_list = []
     for obj in queryset[:2]:
+        print("date: ", obj.dateTimeStamp)
         values_list.append(obj.price)
 
     new_value = values_list[0]
     old_value = values_list[1]
+
     difference = float(new_value) - float(old_value)
-    return str(float('%.3f' % difference))
+    return float('%.3f' % difference)
 
 
 def calculate_average(model_name):
@@ -74,7 +76,7 @@ def calculate_average(model_name):
     if average > float(old_value):
         final_average = "+" + str(float('%.3f' % average))
     else:
-        final_average = "-" + str(float('%.3f' % average))
+        final_average = str(float('%.3f' % average))
 
     return final_average
 
