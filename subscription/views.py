@@ -4,13 +4,15 @@ import stripe
 from django.conf import settings
 from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.shortcuts import get_object_or_404, render, redirect
 from django.http.response import HttpResponseNotFound, JsonResponse, HttpResponse
 from django.views.generic import ListView, CreateView, DetailView, TemplateView
 
 from users.models import User
+from subscription.forms import ProductForm
+from subscription.utils import create_order_history
 from subscription.models import Product, OrderDetail
 
 
@@ -102,18 +104,70 @@ def stripe_webhook(request):
         stripe_customer_id = session.get('customer')
         stripe_subscription_id = session.get('subscription')
 
-        # Get the user and create a new StripeCustomer
+        # Fetch Subscription End & Start Date
+        subscription = stripe.Subscription.retrieve(stripe_subscription_id)
+        # current_period_end
+        # current_period_start
+        product = stripe.Product.retrieve(subscription.plan.product)
+
+        # Get the user and create a new Order
         user = User.objects.get(id=client_reference_id)
         order_obj = OrderDetail.objects.filter(user=user)
 
+        # Create Order History
         if order_obj.exists():
-            order_obj.update(is_active=False)
+            create_order_history(order_obj, subscription, product)
+            order_obj.delete()
 
         OrderDetail.objects.create(
             user=user,
             stripeCustomerId=stripe_customer_id,
             stripeSubscriptionId=stripe_subscription_id,
+            productName=product.name,
+            subscriptionStartDate=subscription.current_period_start,
+            subscriptionEndDate=subscription.current_period_end
         )
 
+        print(">>>>>>>>>>>>>>>>>>>>>>>>>>>> Payment Successful!!")
         print(user.username if user.username else user.id + ' just subscribed.')
     return HttpResponse(status=200)
+
+
+@login_required()
+def list_products(request):
+    context = {}
+    products = Product.objects.all().order_by('price')
+    context.update({
+        "products": products
+    })
+    return render(request, 'Products/list_products.html', context=context)
+
+
+@login_required
+def manage_product(request, uid=None):
+    context = {}
+
+    if uid:
+        user = get_object_or_404(User, pk=uid)
+        context.update({
+            'user': user
+        })
+
+    if request.method == "POST":
+        if uid:
+            form = ProductForm(request.POST, instance=user)
+        else:
+            form = ProductForm(request.POST)
+
+        if form.is_valid():
+            form.save(commit=True)
+            return redirect('list_products')
+    else:
+        if uid:
+            form = ProductForm(instance=user)
+        else:
+            form = ProductForm()
+    context.update({
+        'form': form
+    })
+    return render(request, 'Products/manage_product.html', context=context)

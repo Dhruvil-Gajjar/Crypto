@@ -1,3 +1,6 @@
+import stripe
+from datetime import datetime
+from django.conf import settings
 from django.db import transaction
 from django.contrib.auth import login
 from django.contrib.auth.views import LoginView
@@ -13,6 +16,8 @@ from users.models import User
 from users.tasks import send_activation_link
 from users.tokens import account_activation_token
 from users.forms import SignupForm, RegisterForm, EditUserForm, UpdateUserForm
+
+from subscription.models import OrderDetail, OrderHistory
 
 
 @transaction.atomic
@@ -118,8 +123,12 @@ def update_profile(request, uid=None):
         else:
             form = UpdateUserForm(instance=user)
 
+    subscription = OrderDetail.objects.filter(user=request.user, is_active=True).first()
+    subscription_history = OrderHistory.objects.filter(user=request.user).order_by('created_at')
     context.update({
-        'form': form
+        'form': form,
+        'subscription': subscription,
+        'subscription_history': subscription_history if subscription_history.exists() else None
     })
     return render(request, 'Users/update_profile.html', context=context)
 

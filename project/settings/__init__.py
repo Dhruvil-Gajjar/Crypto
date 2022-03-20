@@ -33,7 +33,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    # Libraries
     'django_extensions',
+    'import_export',
 
     # Celery
     'django_celery_beat',
@@ -135,3 +137,8 @@ EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
 STRIPE_PUBLISHABLE_KEY = os.getenv('STRIPE_PUBLISHABLE_KEY')
 STRIPE_SECRET_KEY = os.getenv('STRIPE_SECRET_KEY')
 STRIPE_ENDPOINT_SECRET = os.getenv('STRIPE_ENDPOINT_SECRET')
+
+
+# FIXER
+FIXER_BASE_URL = "http://data.fixer.io/api/"
+FIXER_ACCESS_KEY = os.getenv('FIXER_ACCESS_KEY')

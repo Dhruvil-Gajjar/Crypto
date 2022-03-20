@@ -44,7 +44,9 @@
                         </p>
                     </a>
                 </li>
+
                 {% if user.is_superuser %}
+                    <li class="nav-header">Admin</li>
                     <li class="nav-item {% if request.resolver_match.url_name == 'list_users' or request.resolver_match.url_name == 'add_user' %}menu-open{% endif %}">
                         <a class="nav-link">
                             <i class="fas fa-users nav-icon"></i>
@@ -64,6 +66,32 @@
 
                             <li class="nav-item">
                                 <a href="{% url 'list_users' %}" class="nav-link {% if request.resolver_match.url_name == 'list_users' %}active{% endif %}">
+                                    <i class="fas fa-list-ul nav-icon"></i>
+                                    <p>List</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="nav-item {% if request.resolver_match.url_name == 'list_products' or request.resolver_match.url_name == 'add_product' %}menu-open{% endif %}">
+                        <a class="nav-link">
+                            <i class="fa fa-cart-arrow-down nav-icon"></i>
+                            <p>
+                                Products
+                                <i class="fas fa-angle-left right"></i>
+                            </p>
+                        </a>
+
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{% url 'add_product' %}" class="nav-link {% if request.resolver_match.url_name == 'add_product' %}active{% endif %}">
+                                    <i class="fas fa-user-plus nav-icon"></i>
+                                    <p>Add</p>
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="{% url 'list_products' %}" class="nav-link {% if request.resolver_match.url_name == 'list_products' %}active{% endif %}">
                                     <i class="fas fa-list-ul nav-icon"></i>
                                     <p>List</p>
                                 </a>
