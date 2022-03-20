@@ -10,14 +10,14 @@ from fbprophet.plot import plot_plotly
 from datetime import datetime
 from core.models import *
 
+gold_obj = Gold.objects.all().order_by('-dateTimeStamp').first()
+euro_obj = Euro.objects.all().order_by('-dateTimeStamp').first()
+jpy_obj = JPY.objects.all().order_by('-dateTimeStamp').first()
+cny_obj = CNY.objects.all().order_by('-dateTimeStamp').first()
+gbp_obj = GBP.objects.all().order_by('-dateTimeStamp').first()
+
 
 def get_trail():
-    gold_obj = Gold.objects.all().order_by('-dateTimeStamp').first()
-    euro_obj = Euro.objects.all().order_by('-dateTimeStamp').first()
-    jpy_obj = JPY.objects.all().order_by('-dateTimeStamp').first()
-    cny_obj = CNY.objects.all().order_by('-dateTimeStamp').first()
-    gbp_obj = GBP.objects.all().order_by('-dateTimeStamp').first()
-
     trail = [
         {
             "price": gold_obj.price if gold_obj else 0,
@@ -47,6 +47,99 @@ def get_trail():
     ]
 
     return trail
+
+
+def calculate_difference(model_name):
+    queryset = model_name.objects.filter(predicted_price=None).order_by('-dateTimeStamp')
+    values_list = []
+    for obj in queryset[:2]:
+        values_list.append(obj.price)
+
+    new_value = values_list[0]
+    old_value = values_list[1]
+    difference = float(new_value) - float(old_value)
+    return str(float('%.3f' % difference))
+
+
+def calculate_average(model_name):
+    queryset = model_name.objects.filter(predicted_price=None).order_by('-dateTimeStamp')
+    values_list = []
+    for obj in queryset[:2]:
+        values_list.append(obj.price)
+
+    new_value = values_list[0]
+    old_value = values_list[1]
+    difference = float(new_value) - float(old_value)
+    average = float(difference) / float(old_value)
+    if average > float(old_value):
+        final_average = "+" + str(float('%.3f' % average))
+    else:
+        final_average = "-" + str(float('%.3f' % average))
+
+    return final_average
+
+
+def get_cards_data():
+    data = [
+        {
+            "commodity_name": "GOLD",
+            "price": gold_obj.price if gold_obj else 0,
+            "difference": calculate_difference(Gold),
+            "average": calculate_average(Gold),
+            "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/624.png"
+        },
+        {
+            "commodity_name": "EURO",
+            "price": euro_obj.price if euro_obj else 0,
+            "difference": calculate_difference(Euro),
+            "average": calculate_average(Euro),
+            "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/2083.png"
+        },
+        {
+            "commodity_name": "JPY",
+            "price": jpy_obj.price if jpy_obj else 0,
+            "difference": calculate_difference(JPY),
+            "average": calculate_average(JPY),
+            "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/2989.png"
+        },
+        {
+            "commodity_name": "CNY",
+            "price": cny_obj.price if cny_obj else 0,
+            "difference": calculate_difference(CNY),
+            "average": calculate_average(CNY),
+            "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/3408.png"
+        },
+        {
+            "commodity_name": "GBP",
+            "price": gbp_obj.price if gbp_obj else 0,
+            "difference": calculate_difference(GBP),
+            "average": calculate_average(GBP),
+            "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/6906.png"
+        }
+    ]
+
+    return data
+
+
+def prepare_last_ten_days_data(model_name):
+    queryset = model_name.objects.filter(predicted_price=None).order_by('-dateTimeStamp')
+    values_list = []
+    for obj in queryset[:10]:
+        values_list.append(float(str(obj.price).replace(",", "")))
+
+    return values_list
+
+
+def get_last_ten_days_chart():
+    data = {
+        "GOLD": prepare_last_ten_days_data(Gold),
+        "EURO": prepare_last_ten_days_data(Euro),
+        "JPY": prepare_last_ten_days_data(JPY),
+        "CNY": prepare_last_ten_days_data(CNY),
+        "GBP": prepare_last_ten_days_data(GBP),
+    }
+
+    return data
 
 
 def get_timeStamp(dtObj):

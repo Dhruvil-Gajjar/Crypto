@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from users.models import User
 from subscription.models import OrderDetail
-from core.utils import get_trail, get_sparkline, get_prediction
+from core.utils import get_trail, get_cards_data, get_last_ten_days_chart, get_sparkline, get_prediction
 
 
 class DashboardView(LoginRequiredMixin, TemplateView):
@@ -21,11 +21,18 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             subscription = None
             if stripe_customer:
                 stripe.api_key = settings.STRIPE_SECRET_KEY
-                subscription = stripe.Subscription.retrieve(stripe_customer.stripeSubscriptionId)
+                try:
+                    subscription = stripe.Subscription.retrieve(stripe_customer.stripeSubscriptionId)
+                except Exception as e:
+                    print(e)
 
             # Get Trail
             trails = get_trail()
 
+            # Get Cards
+            cards = get_cards_data()
+            cards_chart = get_last_ten_days_chart()
+            
             # Get charts
             sparklines = get_sparkline()
             predictions = get_prediction()
@@ -33,6 +40,8 @@ class DashboardView(LoginRequiredMixin, TemplateView):
             context.update({
                 'subscription': subscription,
                 'trails': trails,
+                'cards': cards,
+                'cards_chart': cards_chart,
                 'sparklines': sparklines,
                 'predictions': predictions
             })
