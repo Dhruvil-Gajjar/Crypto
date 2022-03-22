@@ -45,6 +45,26 @@
                     </a>
                 </li>
 
+                <li class="nav-item">
+                    <a href="{% url 'update_profile' request.user.pk %}" class="nav-link {% if request.resolver_match.url_name == 'update_profile' %}active{% endif %}">
+
+                        <i class="nav-icon fa fa-user-circle"></i>
+                        <p>
+                            My Account
+                        </p>
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a href="{% url 'logout' %}" class="nav-link">
+
+                        <i class="nav-icon fas fa-sign-out-alt"></i>
+                        <p>
+                            Log Out
+                        </p>
+                    </a>
+                </li>
+
                 {% if user.is_superuser %}
                     <li class="nav-header">Admin</li>
                     <li class="nav-item {% if request.resolver_match.url_name == 'list_users' or request.resolver_match.url_name == 'add_user' %}menu-open{% endif %}">
