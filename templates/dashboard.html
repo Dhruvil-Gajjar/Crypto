@@ -220,33 +220,93 @@
                 <div class="col-md-6">
                     <div class="card" style="height:480px">
                           <div class="card-header">
-                              User Spending over years
+                              Gold
                           </div>
                       <div class="card-body">
                         <div class="chart"><div class="toolbar">
-                            <button id="one_month" class="btn btn-light btn-sm active">1M</button>
-                            <button id="six_months" class="btn btn-light btn-sm active">6M</button>
-                            <button id="one_year" class="btn btn-light btn-sm active">1Y</button>
-                            <button id="all" class="btn btn-light btn-sm active">ALL</button>
+                            <button id="one_month-gold" class="btn btn-light btn-sm active">1M</button>
+                            <button id="six_months-gold" class="btn btn-light btn-sm active">6M</button>
+                            <button id="one_year-gold" class="btn btn-light btn-sm active">1Y</button>
+                            <button id="all-gold" class="btn btn-light btn-sm active">ALL</button>
                         </div>
-                            <div id="chart-timeline"></div>
+                            <div id="chart-timeline-gold"></div>
                         </div>
                       </div>
                     </div>
                 </div>
-             <!-- /.card-body -->
-                  <div class="col-md-6">
-                       <div class="card" style="height:480px">
+
+                <div class="col-md-6">
+                    <div class="card" style="height:480px">
                           <div class="card-header">
-                              Actual vs Predicted Score
+                              Euro
                           </div>
-                          <div class="card-body">
-                            <div class="chart">
-                                <div id="chart-timeline2"></div>
-                            </div>
+                      <div class="card-body">
+                        <div class="chart"><div class="toolbar">
+                            <button id="one_month-euro" class="btn btn-light btn-sm active">1M</button>
+                            <button id="six_months-euro" class="btn btn-light btn-sm active">6M</button>
+                            <button id="one_year-euro" class="btn btn-light btn-sm active">1Y</button>
+                            <button id="all-euro" class="btn btn-light btn-sm active">ALL</button>
+                        </div>
+                            <div id="chart-timeline-euro"></div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="card" style="height:480px">
+                          <div class="card-header">
+                              JPY
                           </div>
-                       </div>
-                  </div>
+                      <div class="card-body">
+                        <div class="chart"><div class="toolbar">
+                            <button id="one_month-jpy" class="btn btn-light btn-sm active">1M</button>
+                            <button id="six_months-jpy" class="btn btn-light btn-sm active">6M</button>
+                            <button id="one_year-jpy" class="btn btn-light btn-sm active">1Y</button>
+                            <button id="all-jpy" class="btn btn-light btn-sm active">ALL</button>
+                        </div>
+                            <div id="chart-timeline-jpy"></div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card" style="height:480px">
+                          <div class="card-header">
+                              GBP
+                          </div>
+                      <div class="card-body">
+                        <div class="chart"><div class="toolbar">
+                            <button id="one_month-gbp" class="btn btn-light btn-sm active">1M</button>
+                            <button id="six_months-gbp" class="btn btn-light btn-sm active">6M</button>
+                            <button id="one_year-gbp" class="btn btn-light btn-sm active">1Y</button>
+                            <button id="all-gbp" class="btn btn-light btn-sm active">ALL</button>
+                        </div>
+                            <div id="chart-timeline-gbp"></div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="card" style="height:480px">
+                          <div class="card-header">
+                              CNY
+                          </div>
+                      <div class="card-body">
+                        <div class="chart"><div class="toolbar">
+                            <button id="one_month-cny" class="btn btn-light btn-sm active">1M</button>
+                            <button id="six_months-cny" class="btn btn-light btn-sm active">6M</button>
+                            <button id="one_year-cny" class="btn btn-light btn-sm active">1Y</button>
+                            <button id="all-cny" class="btn btn-light btn-sm active">ALL</button>
+                        </div>
+                            <div id="chart-timeline-cny"></div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
 
             </div>
         </div>
@@ -281,9 +341,219 @@
 
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <script type="text/javascript">
-   var options = {
+   var option_gold = {
           series: [{
-          data: {{ sparklines.data }}
+          data: {{ sparklines.gold }}
+
+        }],
+          chart: {
+          id: 'area-datetime',
+          type: 'area',
+          height: 350,
+          zoom: {
+            autoScaleYaxis: true
+          }
+        },
+        dataLabels: {
+          colors: ['#f2b34c'],
+          enabled: false
+        },
+        markers: {
+          colors: ['#f2b34c'],
+          size: 0,
+          style: 'hollow',
+        },
+       colors: ['#f2b34c'],
+        xaxis: {
+          colors: ['#f2b34c'],
+          type: 'datetime',
+          min: new Date('01 jan 2015').getTime(),
+          tickAmount: 6,
+        },
+        tooltip: {
+          x: {
+            format: 'dd MMM yyyy'
+          }
+        },
+        fill: {
+          colors: ['#f2b34c'],
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.9,
+            stops: [0, 100]
+          }
+        },
+        };
+
+        var resetCssClasses = function(activeEl) {
+        var els = document.querySelectorAll('button')
+        Array.prototype.forEach.call(els, function(el) {
+          el.classList.remove('active')
+        })
+
+        activeEl.target.classList.add('active')
+      }
+
+      document
+        .querySelector('#one_month-gold')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 1);
+          date = new Date(month);
+
+          chart.zoomX(
+            date.getTime()
+          )
+        })
+
+      document
+        .querySelector('#six_months-gold')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 6);
+          date = new Date(month);
+
+          chart.zoomX(
+            date.getTime()
+          )
+        })
+
+      document
+        .querySelector('#one_year-gold')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 12);
+          date = new Date(month);
+
+          chart.zoomX(
+            date.getTime()
+          )
+        })
+
+      document.querySelector('#all-gold').addEventListener('click', function(e) {
+        resetCssClasses(e)
+
+        chart.zoomX(
+          new Date('01 Jan 2015').getTime(),
+          new Date().getTime()
+        )
+      })
+
+        var chart = new ApexCharts(document.querySelector("#chart-timeline-gold"), option_gold);
+        chart.render();
+
+        var option_euro = {
+          series: [{
+          data: {{ sparklines.euro }}
+
+        }],
+          chart: {
+          id: 'area-datetime',
+          type: 'area',
+          height: 350,
+          zoom: {
+            autoScaleYaxis: true
+          }
+        },
+        colors: ['#3a57e2'],
+        dataLabels: {
+          enabled: false
+        },
+        markers: {
+          size: 0,
+          style: 'hollow',
+        },
+        xaxis: {
+          type: 'datetime',
+          min: new Date('01 jan 2015').getTime(),
+          tickAmount: 6,
+        },
+        tooltip: {
+          x: {
+            format: 'dd MMM yyyy'
+          }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.9,
+            stops: [0, 100]
+          }
+        },
+        };
+
+        var resetCssClasses = function(activeEl) {
+        var els = document.querySelectorAll('button')
+        Array.prototype.forEach.call(els, function(el) {
+          el.classList.remove('active')
+        })
+
+        activeEl.target.classList.add('active')
+      }
+
+      document
+        .querySelector('#one_month-euro')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 1);
+          date = new Date(month);
+
+          charteuro.zoomX(
+            date.getTime()
+          )
+        })
+
+      document
+        .querySelector('#six_months-euro')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 6);
+          date = new Date(month);
+
+          charteuro.zoomX(
+            date.getTime()
+          )
+        })
+
+      document
+        .querySelector('#one_year-euro')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 12);
+          date = new Date(month);
+
+          charteuro.zoomX(
+            date.getTime()
+          )
+        })
+
+      document.querySelector('#all-euro').addEventListener('click', function(e) {
+        resetCssClasses(e)
+
+        charteuro.zoomX(
+          new Date('01 Jan 2015').getTime(),
+          new Date().getTime()
+        )
+      })
+
+        var charteuro = new ApexCharts(document.querySelector("#chart-timeline-euro"), option_euro);
+        charteuro.render();
+
+      var option_jpy = {
+          series: [{
+          data: {{ sparklines.jpy }}
 
         }],
           chart: {
@@ -332,20 +602,20 @@
       }
 
       document
-        .querySelector('#one_month')
+        .querySelector('#one_month-jpy')
         .addEventListener('click', function(e) {
           resetCssClasses(e)
           current_date = new Date();
           month = current_date.setMonth(current_date.getMonth() - 1);
           date = new Date(month);
 
-          chart.zoomX(
+          chartjpy.zoomX(
             date.getTime()
           )
         })
 
       document
-        .querySelector('#six_months')
+        .querySelector('#six_months-jpy')
         .addEventListener('click', function(e) {
           resetCssClasses(e)
 
@@ -353,118 +623,242 @@
           month = current_date.setMonth(current_date.getMonth() - 6);
           date = new Date(month);
 
-          chart.zoomX(
+          chartjpy.zoomX(
             date.getTime()
           )
         })
 
       document
-        .querySelector('#one_year')
+        .querySelector('#one_year-jpy')
         .addEventListener('click', function(e) {
           resetCssClasses(e)
           current_date = new Date();
           month = current_date.setMonth(current_date.getMonth() - 12);
           date = new Date(month);
 
-          chart.zoomX(
+          chartjpy.zoomX(
             date.getTime()
           )
         })
 
-      document.querySelector('#all').addEventListener('click', function(e) {
+      document.querySelector('#all-jpy').addEventListener('click', function(e) {
         resetCssClasses(e)
 
-        chart.zoomX(
+        chartjpy.zoomX(
           new Date('01 Jan 2015').getTime(),
           new Date().getTime()
         )
       })
 
+        var chartjpy = new ApexCharts(document.querySelector("#chart-timeline-jpy"), option_jpy);
+        chartjpy.render();
 
-        var options1 = {
+
+        var option_gbp = {
           series: [{
-            name: "Session Duration",
-            data: [45, 52, 38, 24, 33, 26, 21, 20, 6, 8, 15, 10]
-          },
-          {
-            name: "Page Views",
-            data: [35, 41, 62, 42, 13, 18, 29, 37, 36, 51, 32, 35]
-          },
-          {
-            name: 'Total Visits',
-            data: [87, 57, 74, 99, 75, 38, 62, 47, 82, 56, 45, 47]
-          }
-        ],
+          data: {{ sparklines.gbp }}
+
+        }],
           chart: {
+          id: 'area-datetime',
+          type: 'area',
           height: 350,
-          type: 'line',
           zoom: {
-            enabled: false
-          },
+            autoScaleYaxis: true
+          }
         },
         dataLabels: {
           enabled: false
         },
-        stroke: {
-          width: [5, 7, 5],
-          curve: 'straight',
-          dashArray: [0, 8, 5]
+        markers: {
+          size: 0,
+          style: 'hollow',
         },
-        title: {
-          text: 'Page Statistics',
-          align: 'left'
+        xaxis: {
+          type: 'datetime',
+          min: new Date('01 jan 2015').getTime(),
+          tickAmount: 6,
         },
-        legend: {
-          tooltipHoverFormatter: function(val, opts) {
-            return val + ' - ' + opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] + ''
+        tooltip: {
+          x: {
+            format: 'dd MMM yyyy'
           }
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.9,
+            stops: [0, 100]
+          }
+        },
+        };
+
+        var resetCssClasses = function(activeEl) {
+        var els = document.querySelectorAll('button')
+        Array.prototype.forEach.call(els, function(el) {
+          el.classList.remove('active')
+        })
+
+        activeEl.target.classList.add('active')
+      }
+
+      document
+        .querySelector('#one_month-gbp')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 1);
+          date = new Date(month);
+
+          chartgbp.zoomX(
+            date.getTime()
+          )
+        })
+
+      document
+        .querySelector('#six_months-gbp')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 6);
+          date = new Date(month);
+
+          chartgbp.zoomX(
+            date.getTime()
+          )
+        })
+
+      document
+        .querySelector('#one_year-gbp')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 12);
+          date = new Date(month);
+
+          chartgbp.zoomX(
+            date.getTime()
+          )
+        })
+
+      document.querySelector('#all-gbp').addEventListener('click', function(e) {
+        resetCssClasses(e)
+
+        chartgbp.zoomX(
+          new Date('01 Jan 2015').getTime(),
+          new Date().getTime()
+        )
+      })
+
+        var chartgbp = new ApexCharts(document.querySelector("#chart-timeline-gbp"), option_gbp);
+        chartgbp.render();
+
+        var option_cny = {
+          series: [{
+          data: {{ sparklines.cny }}
+
+        }],
+          chart: {
+          id: 'area-datetime',
+          type: 'area',
+          height: 350,
+          zoom: {
+            autoScaleYaxis: true
+          }
+        },
+        dataLabels: {
+          enabled: false
         },
         markers: {
           size: 0,
-          hover: {
-            sizeOffset: 6
-          }
+          style: 'hollow',
         },
         xaxis: {
-          categories: ['01 Jan', '02 Jan', '03 Jan', '04 Jan', '05 Jan', '06 Jan', '07 Jan', '08 Jan', '09 Jan',
-            '10 Jan', '11 Jan', '12 Jan'
-          ],
+          type: 'datetime',
+          min: new Date('01 jan 2015').getTime(),
+          tickAmount: 6,
         },
         tooltip: {
-          y: [
-            {
-              title: {
-                formatter: function (val) {
-                  return val + " (mins)"
-                }
-              }
-            },
-            {
-              title: {
-                formatter: function (val) {
-                  return val + " per session"
-                }
-              }
-            },
-            {
-              title: {
-                formatter: function (val) {
-                  return val;
-                }
-              }
-            }
-          ]
+          x: {
+            format: 'dd MMM yyyy'
+          }
         },
-        grid: {
-          borderColor: '#f1f1f1',
-        }
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shadeIntensity: 1,
+            opacityFrom: 0.7,
+            opacityTo: 0.9,
+            stops: [0, 100]
+          }
+        },
         };
 
-        var chart = new ApexCharts(document.querySelector("#chart-timeline"), options);
-        chart.render();
+        var resetCssClasses = function(activeEl) {
+        var els = document.querySelectorAll('button')
+        Array.prototype.forEach.call(els, function(el) {
+          el.classList.remove('active')
+        })
 
-        var chart1 = new ApexCharts(document.querySelector("#chart-timeline2"), options1);
-        chart1.render();
+        activeEl.target.classList.add('active')
+      }
+
+      document
+        .querySelector('#one_month-cny')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 1);
+          date = new Date(month);
+
+          chartcny.zoomX(
+            date.getTime()
+          )
+        })
+
+      document
+        .querySelector('#six_months-cny')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 6);
+          date = new Date(month);
+
+          chartcny.zoomX(
+            date.getTime()
+          )
+        })
+
+      document
+        .querySelector('#one_year-cny')
+        .addEventListener('click', function(e) {
+          resetCssClasses(e)
+          current_date = new Date();
+          month = current_date.setMonth(current_date.getMonth() - 12);
+          date = new Date(month);
+
+          chartcny.zoomX(
+            date.getTime()
+          )
+        })
+
+      document.querySelector('#all-cny').addEventListener('click', function(e) {
+        resetCssClasses(e)
+
+        chartcny.zoomX(
+          new Date('01 Jan 2015').getTime(),
+          new Date().getTime()
+        )
+      })
+
+        var chartcny = new ApexCharts(document.querySelector("#chart-timeline-cny"), option_cny);
+        chartcny.render();
+
+
 
 </script>
 
@@ -483,6 +877,7 @@
             enabled: true
           }
         },
+         colors: ['#f2b34c'],
         fill: {
           type: 'gradient',
           gradient: {
@@ -524,6 +919,7 @@
             enabled: true
           }
         },
+        colors: ['#3a57e2'],
         fill: {
           type: 'gradient',
           gradient: {

@@ -11,6 +11,9 @@ from datetime import datetime
 from core.models import *
 
 
+chart_models = ["gold", "euro", "jpy", "gbp", "cny"]
+
+
 gold_obj = Gold.objects.all().order_by('-dateTimeStamp').first()
 euro_obj = Euro.objects.all().order_by('-dateTimeStamp').first()
 jpy_obj = JPY.objects.all().order_by('-dateTimeStamp').first()
@@ -110,7 +113,7 @@ def get_cards_data():
 def prepare_last_ten_days_data(model_name):
     queryset = model_name.objects.filter(predicted_price=None).order_by('-dateTimeStamp')
     values_list = []
-    for obj in queryset[:10]:
+    for obj in queryset[:20]:
         values_list.append(float(str(obj.price).replace(",", "")))
 
     return values_list
@@ -138,62 +141,36 @@ def get_timeStamp(dtObj):
 
 def get_sparkline():
     sparkline_dict = {
-        "data": []
+        "gold": [],
+        "euro": [],
+        "jpy": [],
+        "gbp": [],
+        "cny": [],
     }
 
-    gold_queryset = Gold.objects.all().order_by('-dateTimeStamp')
-    for obj in gold_queryset:
-        time_stamp = get_timeStamp(obj.dateTimeStamp)
-        if time_stamp:
-            sparkline_dict["data"].append([time_stamp, float(str(obj.price).replace(",", ""))])
+    model = None
+    for model_name in chart_models:
+        if "gold" in model_name:
+            model = Gold
+        elif "euro" in model_name:
+            model = Euro
+        elif "jpy" in model_name:
+            model = JPY
+        elif "gbp" in model_name:
+            model = GBP
+        elif "cny" in model_name:
+            model = CNY
+
+        gold_queryset = model.objects.all().order_by('-dateTimeStamp')
+        for obj in gold_queryset:
+            time_stamp = get_timeStamp(obj.dateTimeStamp)
+            if time_stamp:
+                sparkline_dict[model_name].append([time_stamp, float(str(obj.price).replace(",", ""))])
 
     return sparkline_dict
 
 
-def get_prediction():
-    prediction_dict = {
-        "actual": [],
-        "predicted": []
-    }
-
-    gold_queryset = Gold.objects.all().order_by('-dateTimeStamp')
-    for obj in gold_queryset:
-        if obj.price and obj.predicted_price:
-            prediction_dict["actual"].append(float(str(obj.price).replace(",", "")))
-            prediction_dict["predicted"].append(float(1740.7343300059))
-
-    return prediction_dict
-
-
-def predGoldPrice(df):
-    X_train = df.iloc[:]
-    X_train.tail()
-
-    holiday = pd.DataFrame([])
-    for date, name in sorted(holidays.UnitedStates(years=[2015, 2016, 2017, 2018, 2019, 2020, 2021]).items()):
-        holiday = holiday.append(pd.DataFrame({'ds': date, 'holiday': "US-Holidays"}, index=[0]), ignore_index=True)
-    holiday['ds'] = pd.to_datetime(holiday['ds'], format='%Y-%m-%d', errors='ignore')
-    model = Prophet(daily_seasonality=True,
-                    holidays=holiday,
-                    seasonality_mode=('additive'),
-                    changepoint_prior_scale=0.5,
-                    n_changepoints=100,
-                    holidays_prior_scale=0.5
-                    )
-
-    model.fit(X_train, algorithm='Newton')
-    future = model.make_future_dataframe(periods=30, freq="D")
-    forecast = model.predict(future)
-    forecast.tail(10)
-    fig1 = model.plot(forecast)
-    forecast.to_csv('output_file_sept.csv')
-    fig = model.plot_components(forecast)
-    list(forecast)
-    df_output = pd.read_csv('output_file_sept.csv')
-    calculatingError(df_output, df)
-
-
-def calculatingError(df_output, df):
+def calculatingError(df_output, df, file_name):
     # assigning the output variable to array
     output_yhat = df_output.iloc[:, -1:].values
 
@@ -242,7 +219,7 @@ def calculatingError(df_output, df):
     predError(df_combined)
 
     # Reading the generated dataset
-    df_error = pd.read_csv('output_file_sept_new.csv')
+    df_error = pd.read_csv('output_file_calculated.csv')
 
     # assigning the output variable to array
     re_output_ds = df_error.iloc[:, 1].values
@@ -254,22 +231,6 @@ def calculatingError(df_output, df):
     re_output_error_percent = re_output_error_percent[-30:]
     len(re_output_error_percent)
 
-    # Calculating output actual values
-    i = 0
-    re_output_actual = []
-    while i < len(re_output_error_percent):
-        num = -(re_output_yhat[i] * 100)
-        den = re_output_error_percent[i] - 100
-        re_output_actual.append(num / den)
-        i += 1
-
-    # Calculating Output Difference
-    i = 0
-    re_output_difference = []
-    while i < len(re_output_actual):
-        re_output_difference.append(re_output_actual[i] - re_output_yhat[i])
-        i += 1
-
     # Calculating the Output Integrated error
     i = 0
     re_output_integrated = []
@@ -279,17 +240,9 @@ def calculatingError(df_output, df):
 
     df_final = re_output_ds.copy()
 
-    # Actual Values
-    re_output_actual = pd.DataFrame(re_output_actual)
-    df_final['Actual'] = re_output_actual.values
-
     # Predicted values
     re_output_yhat = pd.DataFrame(re_output_yhat)
     df_final['yhat'] = re_output_yhat.values
-
-    # Difference Values
-    re_output_difference = pd.DataFrame(re_output_difference)
-    df_final['Difference'] = re_output_difference.values
 
     # %Error Values
     re_output_error_percent = pd.DataFrame(re_output_error_percent)
@@ -299,8 +252,14 @@ def calculatingError(df_output, df):
     re_output_integrated = pd.DataFrame(re_output_integrated)
     df_final['%age Integration'] = re_output_integrated.values
 
-    # Generating final csv
-    df_final.to_csv('final_predicted.csv')
+    df_final['da'] = pd.to_datetime(df_final["ds"])
+    df_final["day"] = df_final["da"].dt.weekday
+    df_final["true"] = df_final["da"].dt.weekday > 4
+    df_final = df_final[df_final.true != True]
+    df_final = df_final.drop('da', 1)
+    df_final = df_final.drop('day', 1)
+    df_final = df_final.drop('true', 1)
+    df_final.to_csv(f'final_predicted_{file_name}.csv')
 
 
 def predError(df):
@@ -314,9 +273,9 @@ def predError(df):
     model = Prophet(daily_seasonality=True,
                     holidays=holiday,
                     seasonality_mode=('additive'),
-                    changepoint_prior_scale=0.05,
-                    n_changepoints=500,
-                    holidays_prior_scale=0.1
+                    changepoint_prior_scale=0.5,
+                    n_changepoints=100,
+                    holidays_prior_scale=0.5
                     )
 
     model.fit(X_train, algorithm='Newton')
@@ -324,6 +283,6 @@ def predError(df):
     forecast_new = model.predict(future)
     forecast_new.tail(10)
     fig1 = model.plot(forecast_new)
-    forecast_new.to_csv('output_file_sept_new.csv')
+    forecast_new.to_csv('output_file_calculated.csv')
     fig = model.plot_components(forecast_new)
     list(forecast_new)

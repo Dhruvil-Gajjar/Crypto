@@ -142,3 +142,12 @@ STRIPE_ENDPOINT_SECRET = os.getenv('STRIPE_ENDPOINT_SECRET')
 # FIXER
 FIXER_BASE_URL = "http://data.fixer.io/api/"
 FIXER_ACCESS_KEY = os.getenv('FIXER_ACCESS_KEY')
+
+
+# Add predicted data folder
+ML_DIRECTORY_NAME = "predicted_data"
+ML_DIRECTORY_PATH = os.path.join(BASE_DIR, ML_DIRECTORY_NAME)
+
+ml_directory_exists = os.path.isdir(ML_DIRECTORY_PATH)
+if not ml_directory_exists:
+    os.mkdir(ML_DIRECTORY_PATH)
