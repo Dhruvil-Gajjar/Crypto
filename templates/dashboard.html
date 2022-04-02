@@ -125,7 +125,7 @@
 
 {% block content %}
 <div class="content">
-    {% if request.user.free_trial or subscription.status == "active" %}
+    {% if request.user.free_trial or subscription.status == "active" or request.user.is_supseruser %}
         <div class="container-fluid">
             <div class="row">
                 <div class="col-xl-12">

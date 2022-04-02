@@ -2,50 +2,50 @@ from django.contrib import admin
 from import_export.admin import ImportExportModelAdmin
 
 from core.resource import *
-# from core.forms import EuroForm
+from core.models import PredictionData
 
 
 # Gold
+@admin.register(Gold)
 class GoldAdmin(ImportExportModelAdmin):
     resource_class = GoldResource
+    list_display = ('dateTimeStamp', 'price')
     ordering = ["-dateTimeStamp"]
-
-
-admin.site.register(Gold, GoldAdmin)
 
 
 # Euro
+@admin.register(Euro)
 class EuroAdmin(ImportExportModelAdmin):
     resource_class = EuroResource
+    list_display = ('dateTimeStamp', 'price')
     ordering = ["-dateTimeStamp"]
-    # form = EuroForm
-
-
-admin.site.register(Euro, EuroAdmin)
 
 
 # JPY
+@admin.register(JPY)
 class JPYAdmin(ImportExportModelAdmin):
     resource_class = JPYResource
+    list_display = ('dateTimeStamp', 'price')
     ordering = ["-dateTimeStamp"]
-
-
-admin.site.register(JPY, JPYAdmin)
 
 
 # CNY
+@admin.register(CNY)
 class CNYAdmin(ImportExportModelAdmin):
     resource_class = CNYResource
+    list_display = ('dateTimeStamp', 'price')
     ordering = ["-dateTimeStamp"]
-
-
-admin.site.register(CNY, CNYAdmin)
 
 
 # GBP
+@admin.register(GBP)
 class GBPAdmin(ImportExportModelAdmin):
     resource_class = GBPResource
+    list_display = ('dateTimeStamp', 'price')
     ordering = ["-dateTimeStamp"]
 
 
-admin.site.register(GBP, GBPAdmin)
+@admin.register(PredictionData)
+class PredictionDataAdmin(admin.ModelAdmin):
+    list_display = ('commodity', 'dateTimeStamp', 'price')
+    ordering = ["commodity", "-dateTimeStamp"]

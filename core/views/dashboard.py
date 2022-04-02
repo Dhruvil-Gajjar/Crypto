@@ -24,7 +24,7 @@ class DashboardView(LoginRequiredMixin, TemplateView):
                 try:
                     subscription = stripe.Subscription.retrieve(stripe_customer.stripeSubscriptionId)
                 except Exception as e:
-                    print(e)
+                    print(f"DashboardView Error ====> {e}")
 
             # Get Cards
             cards = get_cards_data()

@@ -149,8 +149,11 @@
                   <li> <i class="fa fa-times" aria-hidden="true"></i> Live Support </li>
                   </ul>
                 </div>
-                <a type="submit" class="stripe-product"
-                   data-value="{{ product.stripeProductId }}" id="submitBtn">
+
+
+                <a type="submit" class="stripe-product {% if request.user.is_superuser %}disabled{% endif %}"
+                   {% if not request.user.is_superuser %}data-value="{{ product.stripeProductId }}" id="submitBtn"{% endif %}
+                    {% if request.user.is_superuser %}disabled{% endif %}>
                     Subscribe
                 </a>
               </div>

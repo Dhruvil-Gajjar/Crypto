@@ -1,16 +1,14 @@
 import os
-import time
+import csv
 import requests
-import holidays
 
 import pandas as pd
-from fbprophet import Prophet
 from celery import shared_task
 from datetime import date, timedelta, datetime
 from django.conf import settings
 
 from core.models import *
-from core.utils import calculatingError
+from core.utils import predGoldPrice
 from project.celery import app
 
 
@@ -31,7 +29,8 @@ def get_missing_dates(dateTimeStamp):
             return missing_dates[1:]
         else:
             return None
-    except:
+    except Exception as e:
+        print(f"get_missing_dates Error ====> {e}")
         return None
 
 
@@ -46,7 +45,7 @@ def get_price_from_fixer(symbol, missing_date=None):
         if response.status_code == 200:
             return response.json()["rates"][symbol]
     except Exception as e:
-        print(e)
+        print(f"get_price_from_fixer Error ====> {e}")
         return None
 
 
@@ -60,7 +59,7 @@ def ingest_price_data():
     today = date.today()
     yesterday = today - timedelta(days=1)
 
-    model = symbol = None
+    model, symbol = None, None
     try:
         for model_name in models:
             if "Euro" in model_name:
@@ -80,7 +79,7 @@ def ingest_price_data():
                 symbol = "XAU"
 
             if model:
-                print('#### >>>>>>>>>>>>>>>>>>>>>>>> Starting to importing %s data' % symbol)
+                print(f"ingest_price_data Info ====> Started importing {symbol} data")
 
                 dateTime_obj = model.objects.all().order_by('-dateTimeStamp').first().dateTimeStamp
                 last_date = str(dateTime_obj).split(" ")[0].strip()
@@ -104,77 +103,108 @@ def ingest_price_data():
                                 dateTimeStamp=datetime.now()
                             )
 
-        print('#### >>>>>>>>>>>>>>>>>>>>>>>> Ingesting data completed')
+        print(f"ingest_price_data Info ====> Ingesting data completed")
     except Exception as e:
-        print(e)
+        print(f"ingest_price_data Error ====> {e}")
 
 
 @app.task()
-def predGoldPrice(df, file_name):
-    X_train = df.iloc[:]
-    X_train.tail()
+def ingest_predicted_data():
+    try:
+        print(f"ingest_predicted_data Info ====> Starting to ingest predicted!")
 
-    holiday = pd.DataFrame([])
-    for date, name in sorted(holidays.UnitedStates(years=[2015, 2016, 2017, 2018, 2019, 2020, 2021]).items()):
-        holiday = holiday.append(pd.DataFrame({'ds': date, 'holiday': "US-Holidays"}, index=[0]), ignore_index=True)
-    holiday['ds'] = pd.to_datetime(holiday['ds'], format='%Y-%m-%d', errors='ignore')
-    model = Prophet(daily_seasonality=True,
-                    holidays=holiday,
-                    seasonality_mode=('additive'),
-                    changepoint_prior_scale=0.5,
-                    n_changepoints=100,
-                    holidays_prior_scale=0.5
-                    )
+        file_list = ["euro", "gbp", "cny", "jpy", "gold"]
+        for file_name in file_list:
+            file_path = os.path.join(settings.ML_DIRECTORY_PATH, f'final_predicted_{file_name}.csv')
+            if os.path.isfile(file_path):
+                # Delete if data exists
+                PredictionData.objects.filter(commodity=str(file_name)).all().delete()
 
-    model.fit(X_train, algorithm='Newton')
-    future = model.make_future_dataframe(periods=30, freq="D")
-    forecast = model.predict(future)
-    forecast.tail(10)
-    fig1 = model.plot(forecast)
-    forecast.to_csv('output_file.csv')
-    fig = model.plot_components(forecast)
-    list(forecast)
-    df_output = pd.read_csv('output_file.csv')
-    calculatingError(df_output, df, file_name)
+                with open(file_path) as f:
+                    reader = csv.reader(f)
+                    # skip header
+                    next(reader)
+
+                    for row in reader:
+                        PredictionData.objects.create(
+                            price=str(row[4]).strip(),
+                            dateTimeStamp=prepare_date(row[1]),
+                            commodity=str(file_name)
+                        )
+
+        print(f"ingest_predicted_data Info ====> Successfully ingested prediction data!")
+    except Exception as e:
+        print(f"ingest_predicted_data Error ====> {e}")
 
 
 @shared_task
 def data_prediction_process():
-    model = file_name = None
+    print(f"data_prediction_process Info ====> Starting to process data for commodities!")
+
+    model, file_name, processed_model = None, None, []
     for model_name in models:
-        if "Euro" in model_name:
+        if "Euro" in model_name and "Euro" not in processed_model:
             model = Euro
             file_name = "euro"
-        elif "GBP" in model_name:
+        elif "GBP" in model_name and "GBP" not in processed_model:
             model = GBP
             file_name = "gbp"
-        elif "CNY" in model_name:
+        elif "CNY" in model_name and "CNY" not in processed_model:
             model = CNY
             file_name = "cny"
-        elif "JPY" in model_name:
+        elif "JPY" in model_name and "JPY" not in processed_model:
             model = JPY
             file_name = "jpy"
-        elif "Gold" in model_name:
+        elif "Gold" in model_name and "Gold" not in processed_model:
             model = Gold
             file_name = "gold"
+        else:
+            break
 
-        # Remove old file
-        file_path = os.path.join(settings.ML_DIRECTORY_PATH, f'final_predicted_{file_name}.csv')
-        if os.path.isfile(file_path):
-            os.remove(file_path)
+        if str(model) not in processed_model:
+            processed_model.append(str(model))
 
-        # Process data
-        pd_list = []
-        obj = model.objects.filter(predicted_price=None).order_by('dateTimeStamp').first()
-        pd_list.append({
-            'Date': obj.dateTimeStamp.strftime('%Y-%m-%d'),
-            'Price': float(str(obj.price).replace(",", ""))
-        })
+            # Remove old files
+            op_file = os.path.join(settings.ML_DIRECTORY_PATH, 'output_file.csv')
+            if os.path.isfile(op_file):
+                os.remove(op_file)
 
-        df = pd.DataFrame(pd_list)
-        df.columns = ['ds', 'y']
-        predGoldPrice.delay(df, file_name)
-        time.sleep(600)
+            op_calculated = os.path.join(settings.ML_DIRECTORY_PATH, 'output_file_calculated.csv')
+            if os.path.isfile(op_calculated):
+                os.remove(op_calculated)
+
+            final_csv_path = os.path.join(settings.ML_DIRECTORY_PATH, f'final_predicted_{file_name}.csv')
+            if os.path.isfile(final_csv_path):
+                os.remove(final_csv_path)
+
+            print(f"data_prediction_process Info ====> Preparing dataframe for {str(model)}")
+
+            # Process data
+            pd_list = []
+            model_queryset = model.objects.filter(predicted_price=None).order_by('dateTimeStamp')
+            for obj in model_queryset:
+                if obj.dateTimeStamp and obj.price:
+                    pd_list.append({
+                        'Date': obj.dateTimeStamp.strftime('%Y-%m-%d'),
+                        'Price': float(str(obj.price).replace(",", ""))
+                    })
+
+            df = pd.DataFrame(pd_list)
+            df.columns = ['ds', 'y']
+
+            print(f"data_prediction_process Info ====> Starting to process data for {str(model)}")
+
+            process_next = predGoldPrice(df, file_name)
+            if process_next:
+                last_obj = model_queryset.last()
+                last_obj.is_data_processed = True
+                last_obj.save()
+                continue
+        else:
+            break
+
+    print(f"data_prediction_process Info ====> Process data completed for {str(datetime.today())}")
+    ingest_predicted_data.delay()
 
 
 def delete_tables_data():
@@ -193,29 +223,3 @@ def delete_tables_data():
 
         # model.objects.all().delete()
         # a = model.objects.all().order_by('-dateTimeStamp').first().delete()
-
-
-# def test_data():
-    # final_csv = settings.BASE_DIR + "/" + 'final_predicted.csv'
-    # print(final_csv)
-
-    # file_path = os.path.join(settings.ML_DIRECTORY_PATH, 'final_predicted_gold.csv')
-    # if os.path.isfile(file_path):
-    #     os.remove(file_path)
-    # pd_list = []
-    # obj = Gold.objects.filter(predicted_price=None).order_by('dateTimeStamp').first()
-    # pd_list.append({
-    #     'Date': obj.dateTimeStamp.strftime('%Y-%m-%d'),
-    #     'Price': float(str(obj.price).replace(",", ""))
-    # })
-    #
-    # df = pd.DataFrame(pd_list)
-    # df.columns = ['ds', 'y']
-    # predGoldPrice(df)
-    # print(df)
-    # df = pd.DataFrame(list())
-
-# from core.tasks import ingest_price_data
-# from core.tasks import delete_tables_data
-# from core.tasks import test_data
-
