@@ -181,7 +181,7 @@ def data_prediction_process():
 
             # Process data
             pd_list = []
-            model_queryset = model.objects.filter(predicted_price=None).order_by('dateTimeStamp')
+            model_queryset = model.objects.all().order_by('dateTimeStamp')
             for obj in model_queryset:
                 if obj.dateTimeStamp and obj.price:
                     pd_list.append({
@@ -223,3 +223,7 @@ def delete_tables_data():
 
         # model.objects.all().delete()
         # a = model.objects.all().order_by('-dateTimeStamp').first().delete()
+
+
+def process_initial_data():
+    data_prediction_process.delay()
