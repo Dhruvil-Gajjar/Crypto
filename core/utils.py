@@ -170,7 +170,7 @@ def get_sparkline():
         pre_obj = pre_queryset.last()
         mod_obj = model_queryset.first()
 
-        if pre_obj and mod_obj and \
+        if (pre_obj and mod_obj) or \
                 str(pre_obj.dateTimeStamp).split(" ")[0] == str(mod_obj.dateTimeStamp).split(" ")[0]:
 
             for obj in pre_queryset:
