@@ -1,0 +1,131 @@
+{% extends 'index.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block title %}
+    My Subscriptions
+{% endblock %}
+
+
+{% block extra_css %}
+    <style>
+        .select2-container{
+            width: 100% !important;
+            max-width: 100%;
+        }
+        .title-sec h4 {
+            font-weight: bold;
+            color: #2a2a2a;
+        }
+
+        .text-sec p b {
+            font-weight: bold;
+            color: #2a2a2a;
+        }
+    </style>
+{% endblock %}
+
+
+{% block content_header %}
+    <div class="content-header">
+      <div class="container-fluid">
+        <div class="row justify-content-end">
+          <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+              <li class="breadcrumb-item">Home</li>
+              <li class="breadcrumb-item active"><a href="#">My Subscriptions</a></li>
+            </ol>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+
+    <div class="row">
+        {% if subscription %}
+            <div class="col-md-12">
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                      <h3 class="card-title">Current Subscription</h3>
+
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                          <i class="fas fa-minus"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                                <div class="col-md-3 col-6">
+                                    <div class="title-sec"><h4>Plan</h4></div>
+                                    <div class="text-sec"><p>{{ subscription.productName }}</p></div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="title-sec"><h4>Amount</h4></div>
+                                    <div class="text-sec"><p>₹ {{ subscription.plan_price }} / {{ subscription.plan_period }}</p></div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="title-sec"><h4>Next billing date</h4></div>
+                                    <div class="text-sec"><p><b>From</b> {{ subscription.subscriptionEndDate|convert_unix_date }} <b>To</b> {{ subscription.subscriptionEndDate|convert_unix_date }}</p></div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+        {% if subscription_history %}
+            <div class="col-md-12">
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                      <h3 class="card-title">Subscription history</h3>
+
+                      <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
+                          <i class="fas fa-minus"></i>
+                        </button>
+                      </div>
+                    </div>
+                    <div class="card-body">
+
+                        {% for subscription_obj in subscription_history %}
+                            <div class="row">
+                                <div class="col-md-3 col-6">
+                                    <div class="title-sec"><h4>Plan</h4></div>
+                                    <div class="text-sec"><p>{{ subscription_obj.productName }}</p></div>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <div class="title-sec"><h4>Amount</h4></div>
+                                    <div class="text-sec"><p>₹ {{ subscription_obj.plan_price }} / {{ subscription_obj.plan_period }}</p></div>
+                                </div>
+                                <div class="col-md-6 col-12">
+                                    <div class="title-sec"><h4>Billing Period</h4></div>
+                                    <div class="text-sec"><p><b>From</b> {{ subscription_obj.subscriptionStartDate|convert_unix_date }}  <b>To</b>  {{ subscription_obj.subscriptionEndDate|convert_unix_date }}</p></div>
+                                </div>
+                            </div>
+                            {% if not forloop.last %}
+                                <hr>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+            </div>
+        {% endif %}
+
+        {% if not subscription and not subscription_history %}
+            <div class="col-md-12">
+                <div class="card" style="margin-top: 20px;">
+                    <div class="card-header">
+                      <h3 class="card-title">No Active Subscriptions</h3>
+                    </div>
+                </div>
+            </div>
+        {% endif %}
+
+    </div>
+
+{% endblock %}

@@ -123,12 +123,8 @@ def update_profile(request, uid=None):
         else:
             form = UpdateUserForm(instance=user)
 
-    subscription = OrderDetail.objects.filter(user=request.user, is_active=True).first()
-    subscription_history = OrderHistory.objects.filter(user=request.user).order_by('created_at')
     context.update({
-        'form': form,
-        'subscription': subscription,
-        'subscription_history': subscription_history if subscription_history.exists() else None
+        'form': form
     })
     return render(request, 'Users/update_profile.html', context=context)
 
