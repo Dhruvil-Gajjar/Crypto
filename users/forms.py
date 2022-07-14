@@ -12,22 +12,29 @@ class SignupForm(UserCreationForm):
         max_length=200,
         help_text='Required',
         widget=forms.TextInput(
-        attrs={'class': 'form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none',
-               'placeholder': 'E-Mail', 'required': True})
+        attrs={'class': 'form-control',
+               'placeholder': 'Enter E-Mail', 'required': True})
     )
     password1 = forms.CharField(
         help_text=password_validation.password_validators_help_text_html(),
-        widget=forms.PasswordInput(attrs={'class': 'form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none', 'placeholder': 'Enter password'}), )
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Please enter a password'}), )
     password2 = forms.CharField(
         help_text="Enter the same password as before, for verification.",
-        widget=forms.PasswordInput(attrs={'class': 'form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none', 'placeholder': 'Confirm password'}), )
+        widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Please re-enter your password.'}), )
 
     class Meta:
         model = User
-        fields = ('first_name', 'last_name', 'email', 'password1', 'password1')
+        fields = ('first_name', 'last_name', 'email', 'password1', 'password1', 'company_name', 'company_size', 
+                  'sector', 'phone_number')
         widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none', 'placeholder': 'First Name', 'required': True}),
-            'last_name': forms.TextInput(attrs={'class': 'form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none', 'placeholder': 'Last Name', 'required': True})
+            # 'first_name': forms.TextInput(attrs={'class': 'form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none', 'placeholder': 'First Name', 'required': True}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name', 'required': True}),
+            # 'last_name': forms.TextInput(attrs={'class': 'form-control border-top-0 border-right-0 border-left-0 rounded-0 shadow-none', 'placeholder': 'Last Name', 'required': True})
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name', 'required': True}),
+            'company_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
+            'company_size': forms.Select(attrs={'class': 'form-group form-control'}),
+            'sector': forms.Select(attrs={'class': 'form-group form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ex) 01012345678 (without "-")'})
         }
 
 

@@ -13,7 +13,7 @@ from django.views.generic import ListView, CreateView, DetailView, TemplateView
 from users.models import User
 from subscription.forms import ProductForm
 from subscription.utils import create_order_history
-from subscription.models import Product, OrderDetail
+from subscription.models import Product, OrderDetail, OrderHistory
 
 
 class SubscriptionView(LoginRequiredMixin, TemplateView):
@@ -25,6 +25,20 @@ class SubscriptionView(LoginRequiredMixin, TemplateView):
             "products": products
         }
         return context
+
+
+@login_required
+def my_subscriptions(request):
+    context = {}
+
+    subscription = OrderDetail.objects.filter(user=request.user, is_active=True).first()
+    subscription_history = OrderHistory.objects.filter(user=request.user).order_by('created_at')
+
+    context.update({
+        'subscription': subscription,
+        'subscription_history': subscription_history if subscription_history.exists() else None
+    })
+    return render(request, 'Subscriptions/my-subscriptions.html', context=context)
 
 
 @csrf_exempt

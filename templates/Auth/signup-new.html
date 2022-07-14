@@ -1,0 +1,235 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Crypto</title>
+
+    <!-- Style CSS -->
+    <link rel="stylesheet" href="{% static 'theme/app/dist/app.css' %}" />
+    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
+    <link href="https://unpkg.com/boxicons@2.1.2/css/boxicons.min.css" rel="stylesheet" />
+    <!-- End Style CSS -->
+
+    <link rel="shortcut icon" href="{% static 'theme/assets/images/logo/favicon.png' %}" />
+    <link rel="apple-touch-icon-precomposed" href="{% static 'theme/assets/images/logo/favicon.png' %}" />
+  </head>
+
+  <body class="body header-fixed">
+    <section class="register">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="block-text center">
+              <h3 class="heading">Register To Crypto</h3>
+              <p class="desc fs-20">
+                Register in advance and enjoy the event benefits
+              </p>
+            </div>
+          </div>
+          <div class="col-md-12">
+            <div class="flat-tabs">
+{#              <ul class="menu-tab">#}
+{#                <li class="active"><h6 class="fs-16">Email</h6></li>#}
+{#                <li><h6 class="fs-16">Mobile</h6></li>#}
+{#              </ul>#}
+
+              <div class="content-tab">
+                <div class="content-inner">
+                  <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                      <label> First Name
+                        <span class="fs-14"> {{ form.first_name.errors }} </span>
+                      </label>
+
+                      {{ form.first_name }}
+                    </div>
+
+                    <div class="form-group">
+                      <label> Last Name
+                        <span class="fs-14"> {{ form.last_name.errors }} </span>
+                      </label>
+
+                      {{ form.last_name }}
+                    </div>
+
+                    <div class="form-group">
+                      <label> Email/ID
+                          <span> {{ form.email.errors }} </span>
+                      </label>
+{#                      <input#}
+{#                        type="email"#}
+{#                        class="form-control"#}
+{#                        id="exampleInputEmail1"#}
+{#                        placeholder="Please fill in the email form."#}
+{#                      />#}
+                        {{ form.email }}
+                    </div>
+
+                    <div class="form-group">
+                      <label> Password
+                        <span> {{ form.password1.errors }} {{ form.password2.errors }} </span>
+                      </label>
+                        {{ form.password1 }}
+
+                        {{ form.password2 }}
+                    </div>
+
+                    <div class="form-group">
+                      <label> Company Name
+                        <span class="fs-14"> {{ form.company_name.errors }} </span>
+                      </label>
+
+                      {{ form.company_name }}
+                    </div>
+
+                    <div class="form-group">
+                      <label> Company Size
+                        <span class="fs-14"> {{ form.company_size.errors }} </span>
+                      </label>
+
+                        {{ form.company_size }}
+                    </div>
+
+                    <div class="form-group">
+                      <label> Sector
+                          <span class="fs-14"> {{ form.sector.errors }} </span>
+                      </label>
+
+                        {{ form.sector }}
+                    </div>
+
+                    <div class="form-group">
+                      <label> Phone
+                        <span class="fs-14"> {{ form.phone_number.errors }} </span>
+                      </label>
+
+                      {{ form.phone_number }}
+                    </div>
+
+                    <button type="submit" class="btn-action"> Sign Up </button>
+
+                      <div class="bottom">
+                      <p>Already have an account?</p>
+                      <a href="{% url 'login' %}">Sign In</a>
+                    </div>
+                  </form>
+                </div>
+                <div class="content-inner">
+                  <form>
+                    <div class="form-group">
+                      <label for="exampleInputEmail1">Mobile Phone</label>
+                      <div>
+                        <select class="form-control">
+                          <option>+1</option>
+                          <option>+84</option>
+                          <option>+82</option>
+                          <option>+32</option>
+                        </select>
+                        <input
+                          type="text"
+                          class="form-control"
+                          placeholder="Your Phone number"
+                        />
+                      </div>
+                    </div>
+                    <div class="form-group">
+                      <label
+                        >Password
+                        <span
+                          >(8 or more characters, including numbers and special
+                          characters)</span
+                        ></label
+                      >
+                      <input
+                        type="password"
+                        class="form-control"
+                        placeholder="Please enter a password."
+                      />
+                      <input
+                        type="password"
+                        class="form-control"
+                        id="exampleInputPassword2"
+                        placeholder="Please re-enter your password."
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label
+                        >NickName
+                        <span class="fs-14"
+                          >(Excluding special characters)</span
+                        ></label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Enter Email"
+                      />
+                    </div>
+                    <div class="form-group">
+                      <label>Country </label>
+                      <select
+                        class="form-control"
+                        id="exampleFormControlSelect1"
+                      >
+                        <option>South Korea (+82)</option>
+                        <option>Vietnamese (+84)</option>
+                        <option>South Korea (+82)</option>
+                        <option>South Korea (+82)</option>
+                      </select>
+                    </div>
+                    <div class="form-group">
+                      <label
+                        >Phone
+                        <span class="fs-14">(Enter numbers only)</span></label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="ex) 01012345678 (without '-')"
+                      />
+                    </div>
+
+                    <div class="form-group">
+                      <label>UID Code </label>
+                      <input
+                        type="text"
+                        class="form-control"
+                        placeholder="Please enter your invitation code."
+                      />
+                    </div>
+
+                    <button type="submit" class="btn-action">
+                      Pre-Registration
+                    </button>
+                    <div class="bottom">
+                      <p>Already have an account?</p>
+                      <a href="login.html">Login</a>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+
+    <script src="{% static 'theme/app/js/aos.js' %}"></script>
+    <script src="{% static 'theme/app/js/jquery.min.js' %}"></script>
+    <script src="{% static 'theme/app/js/jquery.easing.js' %}"></script>
+    <script src="{% static 'theme/app/js/popper.min.js' %}"></script>
+    <script src="{% static 'theme/app/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'theme/app/js/app.js' %}"></script>
+    <script src="{% static 'theme/app/js/jquery.peity.min.js' %}"></script>
+
+    <script src="{% static 'theme/app/js/switchmode.js' %}"></script>
+    <script src="https://unpkg.com/boxicons@2.1.2/dist/boxicons.js"></script>
+
+  </body>
+</html>

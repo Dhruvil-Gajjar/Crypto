@@ -4,6 +4,8 @@ from subscription.views import *
 
 urlpatterns = [
     path('subscriptions/', SubscriptionView.as_view(), name='subscriptions'),
+    path('my-subscriptions/', my_subscriptions, name='my_subscriptions'),
+
     path('config/', stripe_config),
     path('create-checkout-session/', create_checkout_session, name="create_checkout_session"),
     path('success/', success),

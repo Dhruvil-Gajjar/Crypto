@@ -12,6 +12,15 @@ class Gold(models.Model):
     def __str__(self):
         return str(self.id)
 
+    def get_price(self):
+        if int(self.price) < 1:
+            return "%.2f" % round(1/int(self.price), 2)
+
+        return self.price
+
+    class Meta:
+        verbose_name_plural = "Gold"
+
 
 class Euro(models.Model):
     id = models.CharField(primary_key=True, max_length=36, editable=False, default=uuid.uuid4)
@@ -22,6 +31,9 @@ class Euro(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    class Meta:
+        verbose_name_plural = "Euro"
 
 
 class JPY(models.Model):
@@ -34,6 +46,9 @@ class JPY(models.Model):
     def __str__(self):
         return str(self.id)
 
+    class Meta:
+        verbose_name_plural = "JPY"
+
 
 class CNY(models.Model):
     id = models.CharField(primary_key=True, max_length=36, editable=False, default=uuid.uuid4)
@@ -44,6 +59,9 @@ class CNY(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    class Meta:
+        verbose_name_plural = "CNY"
 
 
 class GBP(models.Model):
@@ -56,6 +74,9 @@ class GBP(models.Model):
     def __str__(self):
         return str(self.id)
 
+    class Meta:
+        verbose_name_plural = "GBP"
+
 
 class PredictionData(models.Model):
     id = models.CharField(primary_key=True, max_length=36, editable=False, default=uuid.uuid4)
@@ -65,3 +86,6 @@ class PredictionData(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+    class Meta:
+        verbose_name_plural = "Prediction Values"
