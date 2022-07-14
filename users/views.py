@@ -45,7 +45,7 @@ def user_signup(request):
             )
     else:
         form = SignupForm()
-    return render(request, 'Auth/signup.html', {'form': form})
+    return render(request, 'Auth/signup-new.html', {'form': form})
 
 
 def activate_user(request, uid, token):
