@@ -85,9 +85,13 @@ class UpdateUserForm(UserChangeForm):
 
     class Meta:
         model = User
-        fields = ("email", "first_name", "last_name",)
+        fields = ("email", "first_name", "last_name", "company_name", "company_size", "sector", "phone_number")
         widgets = {
-            'first_name': forms.TextInput(attrs={'class': 'form-control', 'required': True}),
+            'first_name': forms.TextInput(attrs={'class': 'form-control'}),
             'last_name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.TextInput(attrs={'class': 'form-control', 'readonly': 'readonly'}),
+            'company_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}),
+            'company_size': forms.Select(attrs={'class': 'form-control'}),
+            'sector': forms.Select(attrs={'class': 'form-control'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ex) 01012345678 (without "-")'})
         }

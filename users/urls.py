@@ -24,6 +24,7 @@ urlpatterns = [
     path('manage/user/<uuid:uid>/', manage_user, name='edit_user'),
 
     # Update My Profile
+    path('view/user-profile/', view_profile, name='view_profile'),
     path('update/user/<uuid:uid>/', update_profile, name='update_profile'),
 
     # Delete/Action

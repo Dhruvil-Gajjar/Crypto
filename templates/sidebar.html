@@ -46,7 +46,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a href="{% url 'update_profile' request.user.pk %}" class="nav-link {% if request.resolver_match.url_name == 'update_profile' %}active{% endif %}">
+                    <a href="{% url 'view_profile' %}" class="nav-link {% if request.resolver_match.url_name == 'update_profile' or request.resolver_match.url_name == 'view_profile' %}active{% endif %}">
 
                         <i class="nav-icon fa fa-user-circle"></i>
                         <p>
