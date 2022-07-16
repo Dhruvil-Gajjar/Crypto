@@ -108,6 +108,12 @@ def manage_user(request, uid=None):
 
 
 @login_required
+def view_profile(request):
+    context = {}
+    return render(request, 'Users/view_profile.html', context=context)
+
+
+@login_required
 def update_profile(request, uid=None):
     context = {}
 
@@ -119,7 +125,8 @@ def update_profile(request, uid=None):
 
             if form.is_valid():
                 form.save()
-                return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                # return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
+                return redirect('view_profile')
         else:
             form = UpdateUserForm(instance=user)
 
