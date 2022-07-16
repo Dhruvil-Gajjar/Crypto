@@ -1,5 +1,6 @@
 import json
 import stripe
+from datetime import datetime
 
 from django.conf import settings
 from django.urls import reverse, reverse_lazy
@@ -25,6 +26,17 @@ class SubscriptionView(LoginRequiredMixin, TemplateView):
             "products": products
         }
         return context
+
+
+@login_required
+def activate_free_trial(request):
+    user_obj = User.objects.filter(id=request.user.id, is_active=True).first()
+    user_obj.free_trial = True
+    user_obj.free_trial_start_date = datetime.now()
+    user_obj.is_plan_selected = True
+    user_obj.save()
+
+    return redirect('dashboard')
 
 
 @login_required
@@ -129,6 +141,10 @@ def stripe_webhook(request):
 
         # Get the user and create a new Order
         user = User.objects.get(id=client_reference_id)
+        user.free_trial = False
+        user.is_plan_selected = True
+        user.save()
+
         order_obj = OrderDetail.objects.filter(user=user)
 
         # Create Order History
@@ -188,3 +204,13 @@ def manage_product(request, uid=None):
         'form': form
     })
     return render(request, 'Products/manage_product.html', context=context)
+
+
+@login_required
+def cancel_subscription(request):
+    stripe.Subscription.modify(
+        'sub_49ty4767H20z6a',
+        cancel_at_period_end=True
+    )
+
+
