@@ -36,7 +36,8 @@ def end_user_free_trial_period():
         free_trial=True,
         is_staff=False,
         is_superuser=False,
-        date_joined__contains=trial_end_date
+        free_trial_start_date__contains=trial_end_date,
+        is_free_trial_used=False
     )
 
     for user in free_trial_users:
@@ -44,6 +45,7 @@ def end_user_free_trial_period():
             user_joined_date = str(user.date_joined).split(" ")[0]
             if user_joined_date == trial_end_date:
                 user.free_trial = False
+                user.is_free_trial_used = True
                 user.save()
         except Exception as err:
             print('#### >>>>>>>>>>>>>>>>>>>>>>>> Error in updating user with id %s.' % user.id)

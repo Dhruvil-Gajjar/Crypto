@@ -69,7 +69,10 @@ class User(AbstractUser):
     sector = models.IntegerField(choices=SECTOR_CHOICES, default=1)
     date_of_birth = models.DateTimeField(blank=True, null=True)
     phone_number = models.CharField(validators=[PHONE_REGEX], max_length=20, blank=True, null=True)
-    free_trial = models.BooleanField(default=True)
+    free_trial_start_date = models.DateTimeField(blank=True, null=True)
+    free_trial = models.BooleanField(default=False)
+    is_free_trial_used = models.BooleanField(default=False)
+    is_plan_selected = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = []
