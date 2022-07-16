@@ -314,3 +314,9 @@ body.sidebar-mini.layout-fixed.sidebar-collapse .side-nev-logo img {
     height: 250px;
   }
 }
+
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1390px;
+    }
+}
