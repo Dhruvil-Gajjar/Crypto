@@ -16,7 +16,7 @@
                 <p>{{ request.user.dashboard_name }}</p>
             </div>
             <div class="info">
-                <a href="{% url 'update_profile' request.user.pk %}" class="d-block">
+                <a href="{% url 'view_profile' %}" class="d-block">
                     {{ request.user.first_name }} {{ request.user.last_name }}
                 </a>
             </div>
