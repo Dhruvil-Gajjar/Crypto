@@ -3,7 +3,7 @@
 {% load custom_tags %}
 
 {% block title %}
-    My Subscriptions
+    | My Subscriptions
 {% endblock %}
 
 
@@ -67,9 +67,12 @@
                                     <div class="title-sec"><h4>Amount</h4></div>
                                     <div class="text-sec"><p>₹ {{ subscription.plan_price }} / {{ subscription.plan_period }}</p></div>
                                 </div>
-                                <div class="col-md-6 col-12">
+                                <div class="col-md-4 col-6">
                                     <div class="title-sec"><h4>Next billing date</h4></div>
                                     <div class="text-sec"><p><b>From</b> {{ subscription.subscriptionEndDate|convert_unix_date }} <b>To</b> {{ subscription.subscriptionEndDate|convert_unix_date }}</p></div>
+                                </div>
+                                <div class="col-md-2 col-6" style="text-align: center;">
+                                    <a class="btn btn-warning" style="margin-top: 15px;">Cancel Subscription</a>
                                 </div>
                             </div>
                     </div>
