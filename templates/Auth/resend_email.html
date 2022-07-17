@@ -5,7 +5,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>GYNERO | Sign In</title>
+    <title>GYNERO | Resend Link</title>
 
     <!-- Style CSS -->
     <link rel="stylesheet" href="{% static 'theme/app/dist/app.css' %}" />
@@ -22,13 +22,13 @@
       <div class="container">
         <div class="row">
           <div class="col-md-6">
-            <h3 class="heading">Sign In</h3>
+            <h3 class="heading">Resend Activation Link</h3>
           </div>
           <div class="col-md-6">
             <ul class="breadcrumb">
               <li><a href="/">Home</a></li>
               <li><p class="fs-18">/</p></li>
-              <li><p class="fs-18">Sign In</p></li>
+              <li><p class="fs-18">Resend Link</p></li>
             </ul>
           </div>
         </div>
@@ -59,48 +59,32 @@
                       <label for="id_username">
                           Email/ID
                       </label>
-                        <input type="email" class="form-control" placeholder="Email" id="id_username" name="username"
-                               required="required" autofocus="autofocus">
+                        {{ form.email }}
                     </div>
-                    <div class="form-group s1">
-                      <label>Password
-
-                      </label>
-                      <input type="password" class="form-control" placeholder="Password" id="id_password"
-                                   name="password" required="required">
-                    </div>
-
-                    {% if form.errors %}
-                        <div class="form-group form-check">
-                            <span style="color: #d33535;">
-                                Please enter a correct email address and password. Note that both fields may be case-sensitive
-                            </span>
-                        </div>
-                    {% endif %}
 
                     <div class="form-group form-check">
                       <div>
-                        <input type="checkbox" class="form-check-input" />
-                        <label class="form-check-label">Remember Me</label>
+                        {% if form.errors %}
+                            <div class="form-group form-check">
+                                <span style="color: #d33535;">
+                                    {{ form.errors }}
+                                </span>
+                            </div>
+                        {% endif %}
                       </div>
                       <p>
                           <a href="{% url 'password_reset' %}" style="color: red; font-weight: 100;">
                               Forgot Password?
                           </a>
                       </p>
-
                     </div>
 
-                    <button type="submit" class="btn-action">Sign In</button>
+                    <button type="submit" class="btn-action">Send link</button>
                     <div class="bottom">
                       <p>Not a member?</p>
                       <a href="{% url 'user_signup' %}">Sign Up</a>
                     </div>
 
-                    <div class="bottom">
-                      <p>Didn't receive e-mail ?</p>
-                      <a href="{% url 'resend_activation_email' %}">Click here to resend</a>
-                    </div>
                   </form>
                 </div>
 

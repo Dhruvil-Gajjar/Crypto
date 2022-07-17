@@ -1,23 +1,30 @@
 import stripe
+
 from datetime import datetime
 from django.conf import settings
 from django.db import transaction
 from django.contrib.auth import login
+from django.db.models.query_utils import Q
+from django.core.mail import BadHeaderError
+from django.utils.encoding import force_bytes
 from django.contrib.auth.views import LoginView
+from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+# from django.contrib.auth.forms import PasswordResetForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
+from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+
 
 from users.models import User
 from users.tasks import send_activation_link
 from users.tokens import account_activation_token
-from users.forms import SignupForm, RegisterForm, EditUserForm, UpdateUserForm
-
-from subscription.models import OrderDetail, OrderHistory
+from users.forms import SignupForm, RegisterForm, EditUserForm, UpdateUserForm, ResendActivationEmailForm, \
+    UserPasswordResetForm
 
 
 @transaction.atomic
@@ -31,13 +38,14 @@ def user_signup(request):
             user.save()
             current_site = get_current_site(request)
             to_email = form.cleaned_data.get('email')
+            mail_subject = 'GYNERO - Activate your account.'
             message = render_to_string('Auth/acc_active_email.html', {
                 'user': user,
                 'domain': current_site.domain,
                 'uid': user.pk,
                 'token': account_activation_token.make_token(user),
             })
-            send_activation_link.delay(message, to_email)
+            send_activation_link.delay(mail_subject, message, to_email)
             return render(
                 request,
                 'Auth/confirm_email.html',
@@ -46,6 +54,36 @@ def user_signup(request):
     else:
         form = SignupForm()
     return render(request, 'Auth/signup-new.html', {'form': form})
+
+
+def resend_activation_email(request):
+    if request.method == 'POST':
+        form = ResendActivationEmailForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            user = User.objects.filter(email=email, is_active=0).first()
+            if user:
+                current_site = get_current_site(request)
+                to_email = form.cleaned_data.get('email')
+                mail_subject = 'GYNERO - Activate your account.'
+                message = render_to_string('Auth/acc_active_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': user.pk,
+                    'token': account_activation_token.make_token(user),
+                })
+                send_activation_link.delay(mail_subject, message, to_email)
+                return render(
+                    request,
+                    'Auth/confirm_email.html',
+                    {'first_name': user.first_name, 'last_name': user.last_name}
+                )
+            else:
+                form.add_error("email", "User not found for given e-mail!")
+    else:
+        form = ResendActivationEmailForm()
+
+    return render(request, 'Auth/resend_email.html', {'form': form})
 
 
 def activate_user(request, uid, token):
@@ -160,3 +198,34 @@ def user_action(request, action, uid=None):
             'success': True,
             'message': 'Successfully Deleted'
         })
+
+
+def password_reset_request(request):
+    if request.method == "POST":
+        password_reset_form = UserPasswordResetForm(request.POST)
+        if password_reset_form.is_valid():
+            data = password_reset_form.cleaned_data['email']
+            associated_users = User.objects.filter(Q(email=data))
+            if associated_users.exists():
+                current_site = get_current_site(request)
+                for user in associated_users:
+                    mail_subject = 'GYNERO - Reset your account password.'
+                    email_template_name = "Auth/password_reset_email.html"
+                    c = {
+                        "email": user.email,
+                        'domain': current_site.domain,
+                        'site_name': 'Website',
+                        "uid": urlsafe_base64_encode(force_bytes(user.pk)),
+                        "user": user,
+                        'token': default_token_generator.make_token(user),
+                        'protocol': 'http',
+                    }
+                    message = render_to_string(email_template_name, c)
+                    try:
+                        send_activation_link.delay(mail_subject, message, user.email)
+                    except BadHeaderError:
+                        return HttpResponse('Invalid header found.')
+                    return redirect("/password_reset/done/")
+    password_reset_form = UserPasswordResetForm()
+    return render(request=request, template_name="Auth/password_reset.html",
+                  context={"password_reset_form": password_reset_form})

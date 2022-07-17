@@ -7,10 +7,8 @@ from project.celery import app
 
 
 @app.task()
-def send_activation_link(message, to_email):
+def send_activation_link(mail_subject, message, to_email):
     try:
-        mail_subject = 'CRYPTO - Activate your account.'
-
         email = EmailMessage(
             mail_subject, message, to=[to_email]
         )
