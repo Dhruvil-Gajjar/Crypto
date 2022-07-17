@@ -15,7 +15,7 @@ from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
 from users.models import User
 from users.tasks import send_activation_link
 from users.tokens import account_activation_token
-from users.forms import SignupForm, RegisterForm, EditUserForm, UpdateUserForm
+from users.forms import SignupForm, RegisterForm, EditUserForm, UpdateUserForm, ResendActivationEmailForm
 
 from subscription.models import OrderDetail, OrderHistory
 
@@ -46,6 +46,35 @@ def user_signup(request):
     else:
         form = SignupForm()
     return render(request, 'Auth/signup-new.html', {'form': form})
+
+
+def resend_activation_email(request):
+    if request.method == 'POST':
+        form = ResendActivationEmailForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data["email"]
+            user = User.objects.filter(email=email, is_active=0).first()
+            if user:
+                current_site = get_current_site(request)
+                to_email = form.cleaned_data.get('email')
+                message = render_to_string('Auth/acc_active_email.html', {
+                    'user': user,
+                    'domain': current_site.domain,
+                    'uid': user.pk,
+                    'token': account_activation_token.make_token(user),
+                })
+                send_activation_link.delay(message, to_email)
+                return render(
+                    request,
+                    'Auth/confirm_email.html',
+                    {'first_name': user.first_name, 'last_name': user.last_name}
+                )
+            else:
+                form.add_error("email", "User not found for given e-mail!")
+    else:
+        form = ResendActivationEmailForm()
+
+    return render(request, 'Auth/resend_email.html', {'form': form})
 
 
 def activate_user(request, uid, token):

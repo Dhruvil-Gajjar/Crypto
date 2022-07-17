@@ -95,3 +95,11 @@ class UpdateUserForm(UserChangeForm):
             'sector': forms.Select(attrs={'class': 'form-control'}),
             'phone_number': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'ex) 01012345678 (without "-")'})
         }
+
+
+class ResendActivationEmailForm(forms.Form):
+    email = forms.EmailField(
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'form-control'})
+    )
+

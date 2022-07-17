@@ -8,6 +8,7 @@ urlpatterns = [
     # Authentication
     path('signup/', user_signup, name='user_signup'),
     path('activate/<uuid:uid>/<str:token>/', activate_user, name='activate_user'),
+    path('resend-activation-email/', resend_activation_email, name='resend_activation_email'),
 
     path('login/', UserLoginView.as_view(template_name = 'Auth/login-new.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='/'), name='logout'),
