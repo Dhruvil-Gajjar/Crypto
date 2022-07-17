@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import (
     password_validation,
 )
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordResetForm
 
 from users.models import User
 
@@ -103,3 +103,12 @@ class ResendActivationEmailForm(forms.Form):
         widget=forms.TextInput(attrs={'class': 'form-control'})
     )
 
+
+class UserPasswordResetForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super(UserPasswordResetForm, self).__init__(*args, **kwargs)
+
+    email = forms.EmailField(
+        label='',
+        widget=forms.EmailInput(attrs={'class': 'form-control'})
+    )

@@ -83,7 +83,12 @@
                         <input type="checkbox" class="form-check-input" />
                         <label class="form-check-label">Remember Me</label>
                       </div>
-                      <p>Forgot Password?</p>
+                      <p>
+                          <a href="{% url 'password_reset' %}" style="color: red; font-weight: 100;">
+                              Forgot Password?
+                          </a>
+                      </p>
+
                     </div>
 
                     <button type="submit" class="btn-action">Sign In</button>
