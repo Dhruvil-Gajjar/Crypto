@@ -45,3 +45,11 @@ def dashboard_view(request):
             return render(request, 'dashboard.html', context=context)
     else:
         return redirect('subscriptions')
+
+
+def landing_view(request):
+    if request.user.is_authenticated:
+        return redirect('dashboard')
+    else:
+        context = {}
+        return render(request, 'landing_page.html', context=context)
