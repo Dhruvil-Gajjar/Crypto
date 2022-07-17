@@ -3,7 +3,7 @@ from project.settings import *
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["13.231.183.227", "ec2-13-231-183-227.ap-northeast-1.compute.amazonaws.com"]
+ALLOWED_HOSTS = ["gynero.com", "www.gynero.com"]
 
 
 # Database
