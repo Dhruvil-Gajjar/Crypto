@@ -116,7 +116,7 @@ USE_TZ = True
 
 
 # User Redirect
-LOGIN_URL = "/login"
+LOGIN_URL = "/"
 LOGIN_REDIRECT_URL = 'dashboard'
 
 
