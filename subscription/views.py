@@ -29,17 +29,6 @@ class SubscriptionView(LoginRequiredMixin, TemplateView):
 
 
 @login_required
-def activate_free_trial(request):
-    user_obj = User.objects.filter(id=request.user.id, is_active=True).first()
-    user_obj.free_trial = True
-    user_obj.free_trial_start_date = datetime.now()
-    user_obj.is_plan_selected = True
-    user_obj.save()
-
-    return redirect('dashboard')
-
-
-@login_required
 def my_subscriptions(request):
     context = {}
 
