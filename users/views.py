@@ -1,8 +1,10 @@
 import stripe
 
 from datetime import datetime
+from django.urls import reverse
 from django.conf import settings
 from django.db import transaction
+from django.contrib import messages
 from django.contrib.auth import login
 from django.db.models.query_utils import Q
 from django.core.mail import BadHeaderError
@@ -12,13 +14,12 @@ from django.utils.http import urlsafe_base64_encode
 from django.template.loader import render_to_string
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-# from django.contrib.auth.forms import PasswordResetForm
+from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.tokens import default_token_generator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-
 
 from users.models import User
 from users.tasks import send_activation_link
@@ -100,8 +101,35 @@ def activate_user(request, uid, token):
         return HttpResponse('Activation link is invalid!')
 
 
-class UserLoginView(LoginView):
-    template_name = 'Auth/login.html'
+def login_view(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request.POST)
+        username = request.POST['username']
+        password = request.POST['password']
+
+        user_obj = User.objects.filter(email=username)
+        if user_obj.exists():
+            if user_obj.first().is_active:
+                if user_obj.first().check_password(password):
+                    login(request, user_obj.first(), backend='django.contrib.auth.backends.ModelBackend')
+                    return redirect(reverse('dashboard'))
+                else:
+                    messages.error(request, 'Username or password not correct !!')
+                    return redirect(reverse('login'))
+            else:
+                messages.error(request, 'Please activate your account !!')
+                return redirect(reverse('login'))
+        else:
+            messages.error(request, 'Account with this email does not exist !!')
+            return redirect(reverse('login'))
+    else:
+        form = AuthenticationForm()
+
+    return render(request, 'Auth/login-new.html', {'form': form})
+
+
+# class UserLoginView(LoginView):
+#     template_name = 'Auth/login.html'
 
 
 @login_required()
@@ -218,7 +246,7 @@ def password_reset_request(request):
                         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                         "user": user,
                         'token': default_token_generator.make_token(user),
-                        'protocol': 'http',
+                        'protocol': 'https',
                     }
                     message = render_to_string(email_template_name, c)
                     try:

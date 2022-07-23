@@ -7,6 +7,7 @@ from django.urls import reverse, reverse_lazy
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.contrib.sites.shortcuts import get_current_site
 from django.shortcuts import get_object_or_404, render, redirect
 from django.http.response import HttpResponseRedirect, JsonResponse, HttpResponse
 from django.views.generic import ListView, CreateView, DetailView, TemplateView
@@ -26,17 +27,6 @@ class SubscriptionView(LoginRequiredMixin, TemplateView):
             "products": products
         }
         return context
-
-
-@login_required
-def activate_free_trial(request):
-    user_obj = User.objects.filter(id=request.user.id, is_active=True).first()
-    user_obj.free_trial = True
-    user_obj.free_trial_start_date = datetime.now()
-    user_obj.is_plan_selected = True
-    user_obj.save()
-
-    return redirect('dashboard')
 
 
 @login_required
@@ -64,7 +54,7 @@ def stripe_config(request):
 def create_checkout_session(request):
     if request.method == 'POST':
         stripe_product_id = request.POST.get('stripeProductId')
-        domain_url = 'http://52.8.38.105/'
+        domain_url = get_current_site(request).domain
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             checkout_session = stripe.checkout.Session.create(

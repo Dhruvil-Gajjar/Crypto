@@ -19,6 +19,54 @@
 
   </head>
   <body class="body header-fixed">
+    <!-- Header -->
+    <header id="header_main" class="header">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-12">
+            <div class="header__body d-flex justify-content-between">
+              <div class="header__left">
+                <div class="logo">
+                  <a class="light" href="/">
+                    <img
+                      src="{% static 'theme/assets/images/logo/favicon.png' %}"
+                      alt=""
+                      width="42"
+                      height="32"
+                      data-retina="assets/images/logo/logo@2x.png"
+                      data-width="118"
+                      data-height="32"
+                      style="margin-right: 10px;"
+                    />
+                      Gynreo
+                  </a>
+                </div>
+                <div class="left__main">
+                  <nav id="main-nav" class="main-nav">
+                    <ul id="menu-primary-menu" class="menu">
+                      <li class="menu-item-has-children current-menu-item">
+                        <a href="/">Homepage </a>
+                      </li>
+                    </ul>
+                  </nav>
+                  <!-- /#main-nav -->
+                </div>
+              </div>
+
+              <div class="header__right">
+                  <ul id="menu-primary-menu" class="menu">
+                    <li class="menu-item-has-children current-menu-item">
+                        <a href="{% url 'login' %}">Sign In</a>
+                    </li>
+                  </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </header>
+    <!-- end Header -->
+
     <!-- Banner Top -->
     <section class="banner">
       <div class="container">
@@ -30,7 +78,7 @@
                 Coin gynero is the easiest, safest, and fastest way to buy &
                 sell crypto asset exchange.
               </p>
-              <a href="{% url 'login' %}" class="btn-action"><span>Get started now</span></a>
+              <a href="{% url 'user_signup' %}" class="btn-action"><span>Sign Up Now</span></a>
               <div class="partner">
                 <h6>Our Partners</h6>
                 <div class="partner__list">
@@ -145,7 +193,7 @@
       </div>
       <div class="container-fluid bg">
         <div class="footer__bottom">
-          <p>Copyright © 2022 Gynero</p>
+          <p>Copyright © 2022 Gynero Portal. All rights reserved.</p>
           <ul class="list-social">
             <li>
               <a href=""><i class="fa-brands fa-facebook"></i></a>
