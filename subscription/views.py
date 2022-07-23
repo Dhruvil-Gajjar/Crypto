@@ -59,8 +59,8 @@ def create_checkout_session(request):
         try:
             checkout_session = stripe.checkout.Session.create(
                 client_reference_id=request.user.id if request.user.is_authenticated else None,
-                success_url=domain_url + 'success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=domain_url + 'cancel/',
+                success_url=domain_url + '/success?session_id={CHECKOUT_SESSION_ID}',
+                cancel_url=domain_url + '/cancel/',
                 payment_method_types=['card'],
                 mode='subscription',
                 line_items=[
@@ -83,9 +83,7 @@ def success(request):
         subscription = stripe.Subscription.retrieve(stripe_customer.stripeSubscriptionId)
         product = stripe.Product.retrieve(subscription.plan.product)
 
-        return render(request, 'Subscriptions/success.html', {
-            'product': product,
-        })
+        return HttpResponseRedirect(reverse('my_subscriptions'))
     else:
         return HttpResponseRedirect(reverse('dashboard'))
 
@@ -108,9 +106,15 @@ def stripe_webhook(request):
             payload, sig_header, endpoint_secret
         )
     except ValueError as e:
+        print("stripe_webhook Payload Error")
+        print(e)
+
         # Invalid payload
         return HttpResponse(status=400)
     except stripe.error.SignatureVerificationError as e:
+        print("stripe_webhook Signature Error")
+        print(e)
+
         # Invalid signature
         return HttpResponse(status=400)
 
@@ -131,7 +135,6 @@ def stripe_webhook(request):
 
         # Get the user and create a new Order
         user = User.objects.get(id=client_reference_id)
-        user.free_trial = False
         user.is_plan_selected = True
         user.save()
 
