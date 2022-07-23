@@ -110,7 +110,7 @@ def login_view(request):
         user_obj = User.objects.filter(email=username)
         if user_obj.exists():
             if user_obj.first().is_active:
-                if user_obj.filter(password=password).first():
+                if user_obj.first().check_password(password):
                     login(request, user_obj.first(), backend='django.contrib.auth.backends.ModelBackend')
                     return redirect(reverse('dashboard'))
                 else:

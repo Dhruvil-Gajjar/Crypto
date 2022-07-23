@@ -43,7 +43,7 @@
             <div class="block-text center">
               <h3 class="heading">Sign In To Gynero</h3>
               <p class="desc fs-20">
-                Welcome back! Log In now to start trading
+                  Welcome back! Log In to view Analytics and Predictions
               </p>
 
             </div>
@@ -57,7 +57,7 @@
                     {% csrf_token %}
                     <div class="form-group">
                       <label for="id_username">
-                          Email/ID
+                          Email
                       </label>
                         <input type="email" class="form-control" placeholder="Email" id="id_username" name="username"
                                required="required" autofocus="autofocus">
@@ -84,7 +84,7 @@
                         <label class="form-check-label">Remember Me</label>
                       </div>
                       <p>
-                          <a href="{% url 'password_reset' %}" style="color: red; font-weight: 100;">
+                          <a href="{% url 'password_reset' %}" style="color: #303030; font-weight: 100;">
                               Forgot Password?
                           </a>
                       </p>
@@ -98,8 +98,8 @@
                     </div>
 
                     <div class="bottom">
-                      <p>Didn't receive e-mail ?</p>
-                      <a href="{% url 'resend_activation_email' %}">Click here to resend</a>
+                      <p>Didn't receive activation email?</p>
+                      <a href="{% url 'resend_activation_email' %}">Resend</a>
                     </div>
                   </form>
                 </div>
