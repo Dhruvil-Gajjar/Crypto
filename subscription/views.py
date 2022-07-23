@@ -54,7 +54,7 @@ def stripe_config(request):
 def create_checkout_session(request):
     if request.method == 'POST':
         stripe_product_id = request.POST.get('stripeProductId')
-        domain_url = get_current_site(request).domain
+        domain_url = settings.SITE_PROTOCOL + get_current_site(request).domain
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
             checkout_session = stripe.checkout.Session.create(

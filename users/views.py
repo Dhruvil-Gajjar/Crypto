@@ -41,6 +41,7 @@ def user_signup(request):
             to_email = form.cleaned_data.get('email')
             mail_subject = 'GYNERO - Activate your account.'
             message = render_to_string('Auth/acc_active_email.html', {
+                'protocol': settings.SITE_PROTOCOL,
                 'user': user,
                 'domain': current_site.domain,
                 'uid': user.pk,
@@ -68,6 +69,7 @@ def resend_activation_email(request):
                 to_email = form.cleaned_data.get('email')
                 mail_subject = 'GYNERO - Activate your account.'
                 message = render_to_string('Auth/acc_active_email.html', {
+                    'protocol': settings.SITE_PROTOCOL,
                     'user': user,
                     'domain': current_site.domain,
                     'uid': user.pk,
@@ -246,7 +248,7 @@ def password_reset_request(request):
                         "uid": urlsafe_base64_encode(force_bytes(user.pk)),
                         "user": user,
                         'token': default_token_generator.make_token(user),
-                        'protocol': 'https',
+                        'protocol': settings.SITE_PROTOCOL,
                     }
                     message = render_to_string(email_template_name, c)
                     try:

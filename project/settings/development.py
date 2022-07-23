@@ -36,3 +36,5 @@ STATICFILES_DIRS = [
 # Media settings
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+SITE_PROTOCOL = "http://"
