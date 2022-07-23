@@ -35,7 +35,6 @@ def get_values_list(model_name):
     queryset = model_name.objects.all().order_by('-dateTimeStamp')
     values_list = []
     for obj in queryset[:2]:
-        print("date: ", obj.dateTimeStamp)
         values_list.append(obj.price)
 
     new_value = values_list[0]
@@ -106,6 +105,13 @@ def get_cards_data():
             "difference": calculate_difference(GBP),
             "average": calculate_average(GBP),
             "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/6906.png"
+        },
+        {
+            "commodity_name": "GYNERO",
+            "price": get_price(gbp_obj.price) if gbp_obj else 0,
+            "difference": calculate_difference(Euro),
+            "average": calculate_average(Euro),
+            "commodity_img": "https://s2.coinmarketcap.com/static/img/coins/32x32/624.png"
         }
     ]
 
@@ -128,6 +134,7 @@ def get_last_ten_days_chart():
         "JPY": prepare_last_ten_days_data(JPY),
         "CNY": prepare_last_ten_days_data(CNY),
         "GBP": prepare_last_ten_days_data(GBP),
+        "GYNERO": prepare_last_ten_days_data(Euro),
     }
 
     return data
@@ -150,42 +157,47 @@ def get_sparkline():
         "cny": [],
     }
 
-    model = None
-    predicted_queryset = PredictionData.objects.all()
-    for model_name in chart_models:
-        if "gold" in model_name:
-            model = Gold
-        elif "euro" in model_name:
-            model = Euro
-        elif "jpy" in model_name:
-            model = JPY
-        elif "gbp" in model_name:
-            model = GBP
-        elif "cny" in model_name:
-            model = CNY
+    try:
+        model = None
+        predicted_queryset = PredictionData.objects.all()
+        for model_name in chart_models:
+            if "gold" in model_name:
+                model = Gold
+            elif "euro" in model_name:
+                model = Euro
+            elif "jpy" in model_name:
+                model = JPY
+            elif "gbp" in model_name:
+                model = GBP
+            elif "cny" in model_name:
+                model = CNY
 
-        pre_queryset = predicted_queryset.filter(commodity=model_name).order_by('-dateTimeStamp')
-        model_queryset = model.objects.all().order_by('-dateTimeStamp')
+            pre_queryset = predicted_queryset.filter(commodity=model_name).order_by('-dateTimeStamp')
+            model_queryset = model.objects.all().order_by('-dateTimeStamp')
 
-        pre_obj = pre_queryset.last()
-        mod_obj = model_queryset.first()
+            pre_obj = pre_queryset.last()
+            mod_obj = model_queryset.first()
 
-        if (pre_obj and mod_obj) or \
-                str(pre_obj.dateTimeStamp).split(" ")[0] == str(mod_obj.dateTimeStamp).split(" ")[0]:
+            if (pre_obj and mod_obj) or \
+                    str(pre_obj.dateTimeStamp).split(" ")[0] == str(mod_obj.dateTimeStamp).split(" ")[0]:
 
-            for obj in pre_queryset:
+                for obj in pre_queryset:
+                    time_stamp = get_timeStamp(obj.dateTimeStamp)
+                    if time_stamp:
+                        sparkline_dict[model_name].append([time_stamp, float("{:.1f}".format(float(obj.price)))])
+
+                del sparkline_dict[model_name][-1]
+
+            for obj in model_queryset:
                 time_stamp = get_timeStamp(obj.dateTimeStamp)
                 if time_stamp:
-                    sparkline_dict[model_name].append([time_stamp, float("{:.1f}".format(float(obj.price)))])
+                    sparkline_dict[model_name].append([time_stamp, float(str(obj.price).replace(",", ""))])
 
-            del sparkline_dict[model_name][-1]
-
-        for obj in model_queryset:
-            time_stamp = get_timeStamp(obj.dateTimeStamp)
-            if time_stamp:
-                sparkline_dict[model_name].append([time_stamp, float(str(obj.price).replace(",", ""))])
-
-    return sparkline_dict
+        sparkline_dict["gynero"] = sparkline_dict["euro"]
+        return sparkline_dict
+    except Exception as e:
+        print(f"Error get_sparkline : \n{e}")
+        return sparkline_dict
 
 
 """

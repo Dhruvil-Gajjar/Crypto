@@ -15,7 +15,7 @@ from django.views.generic import ListView, CreateView, DetailView, TemplateView
 from users.models import User
 from subscription.forms import ProductForm
 from subscription.tasks import create_order_history
-from subscription.utils import get_date_N_days_after
+from subscription.utils import get_date_N_days_after, calculate_diff_in_days
 from subscription.models import Product, OrderDetail, OrderHistory
 
 
@@ -58,22 +58,38 @@ def create_checkout_session(request):
         domain_url = settings.SITE_PROTOCOL + get_current_site(request).domain
         stripe.api_key = settings.STRIPE_SECRET_KEY
         try:
-            checkout_session = stripe.checkout.Session.create(
-                client_reference_id=request.user.id if request.user.is_authenticated else None,
-                success_url=domain_url + '/success?session_id={CHECKOUT_SESSION_ID}',
-                cancel_url=domain_url + '/cancel/',
-                payment_method_types=['card'],
-                mode='subscription',
-                line_items=[
-                    {
-                        'price': Product.objects.filter(stripeProductId=stripe_product_id).first().stripeProductId,
-                        'quantity': 1,
+            if request.user.free_trial:
+                _free_trial_days = 14 - calculate_diff_in_days(request.user.email)
+                checkout_session = stripe.checkout.Session.create(
+                    client_reference_id=request.user.id if request.user.is_authenticated else None,
+                    success_url=domain_url + '/success?session_id={CHECKOUT_SESSION_ID}',
+                    cancel_url=domain_url + '/cancel/',
+                    payment_method_types=['card'],
+                    mode='subscription',
+                    line_items=[
+                        {
+                            'price': Product.objects.filter(stripeProductId=stripe_product_id).first().stripeProductId,
+                            'quantity': 1,
+                        }
+                    ],
+                    subscription_data={
+                        "trial_end": get_date_N_days_after(_free_trial_days)
                     }
-                ],
-                subscription_data={
-                    "trial_end": get_date_N_days_after(15)
-                }
-            )
+                )
+            else:
+                checkout_session = stripe.checkout.Session.create(
+                    client_reference_id=request.user.id if request.user.is_authenticated else None,
+                    success_url=domain_url + '/success?session_id={CHECKOUT_SESSION_ID}',
+                    cancel_url=domain_url + '/cancel/',
+                    payment_method_types=['card'],
+                    mode='subscription',
+                    line_items=[
+                        {
+                            'price': Product.objects.filter(stripeProductId=stripe_product_id).first().stripeProductId,
+                            'quantity': 1,
+                        }
+                    ]
+                )
             return JsonResponse({'sessionId': checkout_session['id']})
         except Exception as e:
             return JsonResponse({'error': str(e)})

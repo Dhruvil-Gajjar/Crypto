@@ -10,7 +10,7 @@ from django.conf import settings
 from core.models import *
 from core.utils import predGoldPrice
 from project.celery import app
-
+from users.tasks import send_subscription_reminder
 
 FIXER_BASE_URL = settings.FIXER_BASE_URL
 FIXER_ACCESS_KEY = settings.FIXER_ACCESS_KEY
@@ -135,6 +135,9 @@ def ingest_predicted_data():
         print(f"ingest_predicted_data Info ====> Successfully ingested prediction data!")
     except Exception as e:
         print(f"ingest_predicted_data Error ====> {e}")
+        pass
+
+    send_subscription_reminder.delay()
 
 
 @shared_task

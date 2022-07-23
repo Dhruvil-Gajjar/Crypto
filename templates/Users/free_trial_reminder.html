@@ -1,0 +1,18 @@
+{% autoescape off %}
+*****************************
+This is an auto-generated email.
+Please do not reply to this email. We thank you for your kind understanding.
+
+If you are unsure as to why you are receiving this email, or have any inquiries,
+please contact us using the inquiry form on our website. We apologize for any inconvenience caused.
+*****************************
+
+Hey {{ user.email }},
+
+Your account trial expires in {{ hour }} hours.
+
+Thank you for using GYNERO-PORTAL.
+You can click below link to sign in !!,
+
+{{ protocol }}{{ domain }}{% url 'login' %}
+{% endautoescape %}
