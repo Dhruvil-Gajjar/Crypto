@@ -70,12 +70,12 @@
                                    name="password" required="required">
                     </div>
 
-                    {% if form.errors %}
-                        <div class="form-group form-check">
-                            <span style="color: #d33535;">
-                                Please enter a correct email address and password. Note that both fields may be case-sensitive
-                            </span>
-                        </div>
+                    {% if messages %}
+                        <ul class="messages" style="margin-bottom: 15px;">
+                            {% for message in messages %}
+                            <li class="text-danger">{{ message }}</li>
+                            {% endfor %}
+                        </ul>
                     {% endif %}
 
                     <div class="form-group form-check">
