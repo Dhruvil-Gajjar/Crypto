@@ -14,7 +14,8 @@ from django.views.generic import ListView, CreateView, DetailView, TemplateView
 
 from users.models import User
 from subscription.forms import ProductForm
-from subscription.utils import create_order_history
+from subscription.tasks import create_order_history
+from subscription.utils import get_date_N_days_after
 from subscription.models import Product, OrderDetail, OrderHistory
 
 
@@ -68,7 +69,10 @@ def create_checkout_session(request):
                         'price': Product.objects.filter(stripeProductId=stripe_product_id).first().stripeProductId,
                         'quantity': 1,
                     }
-                ]
+                ],
+                subscription_data={
+                    "trial_end": get_date_N_days_after(15)
+                }
             )
             return JsonResponse({'sessionId': checkout_session['id']})
         except Exception as e:
@@ -142,9 +146,8 @@ def stripe_webhook(request):
 
         # Create Order History
         if order_obj.exists():
-            create_order_history(order_obj, subscription, product)
-            order_obj.delete()
-
+            create_order_history.delay(order_obj, subscription, product)
+            
         OrderDetail.objects.create(
             user=user,
             stripeCustomerId=stripe_customer_id,
