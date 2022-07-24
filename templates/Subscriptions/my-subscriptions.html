@@ -46,6 +46,7 @@
 
     <div class="row">
         {% if subscription %}
+
             <div class="col-md-12">
                 <div class="card" style="margin-top: 20px;">
                     <div class="card-header">
@@ -59,25 +60,33 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                                <div class="col-md-3 col-6">
-                                    <div class="title-sec"><h4>Plan</h4></div>
-                                    <div class="text-sec"><p>{{ subscription.productName }}</p></div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="title-sec"><h4>Amount</h4></div>
-                                    <div class="text-sec"><p>₹ {{ subscription.plan_price }} / {{ subscription.plan_period }}</p></div>
-                                </div>
-                                <div class="col-md-4 col-6">
-                                    <div class="title-sec"><h4>Next billing date</h4></div>
-                                    <div class="text-sec"><p><b>From</b> {{ subscription.subscriptionStartDate|convert_unix_date }} <b>To</b> {{ subscription.subscriptionEndDate|convert_unix_date }}</p></div>
-                                </div>
-                                <div class="col-md-2 col-6" style="text-align: center;">
-                                    <a class="btn btn-warning" style="margin-top: 15px;">Cancel Subscription</a>
-                                </div>
+                            <div class="col-md-3 col-6">
+                                <div class="title-sec"><h4>Plan</h4></div>
+                                <div class="text-sec"><p>{{ subscription.productName }}</p></div>
                             </div>
+
+                            <div class="col-md-3 col-6">
+                                <div class="title-sec"><h4>Amount</h4></div>
+                                <div class="text-sec"><p>₹ {{ subscription.plan_price }} / {{ subscription.plan_period }}</p></div>
+                            </div>
+
+                            <div class="col-md-4 col-6">
+                                <div class="title-sec"><h4>Next billing date</h4></div>
+                                <div class="text-sec"><p><b>From</b> {{ subscription.subscriptionStartDate|convert_unix_date }} <b>To</b> {{ subscription.subscriptionEndDate|convert_unix_date }}</p></div>
+                            </div>
+
+                            <div class="col-md-2 col-6" style="text-align: center;">
+                                {% if not subscription.is_canceled %}
+                                    <a href="{% url 'cancel_subscription' subscription.stripeSubscriptionId %}" class="btn btn-warning" style="margin-top: 15px;">Cancel Subscription</a>
+                                {% else %}
+                                    <a class="btn btn-danger" style="margin-top: 15px; color: white;"> Canceled </a>
+                                {% endif %}
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
+
         {% endif %}
 
         {% if subscription_history %}

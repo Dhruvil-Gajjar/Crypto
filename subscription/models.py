@@ -73,6 +73,10 @@ class OrderDetail(models.Model):
         default=True,
         verbose_name='Is Active'
     )
+    is_canceled = models.BooleanField(
+        default=False,
+        verbose_name='Is Canceled'
+    )
 
     def __str__(self):
         if self.user and self.user.first_name and self.user.last_name:
