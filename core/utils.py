@@ -368,3 +368,24 @@ def predError(df):
     except Exception as e:
         print(f"predError Error ====> {e}")
         return True
+
+
+def gold_price_inversion():
+    gold_queryset = Gold.objects.all()
+    pred_queryset = PredictionData.objects.filter(commodity="gold")
+
+    querysets = [gold_queryset, pred_queryset]
+    for queryset in querysets:
+        for obj in queryset:
+            if "," in str(obj.price):
+                new_value = float(str(obj.price).replace(",", ""))
+            else:
+                new_value = obj.price
+
+            if float(new_value) < 1:
+                obj.price = "%.2f" % round(1/float(new_value), 2)
+                obj.save()
+            else:
+                continue
+
+# from core.utils import gold_price_inversion

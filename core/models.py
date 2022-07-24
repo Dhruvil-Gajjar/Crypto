@@ -12,14 +12,19 @@ class Gold(models.Model):
     def __str__(self):
         return str(self.id)
 
-    def get_price(self):
-        if int(self.price) < 1:
-            return "%.2f" % round(1/int(self.price), 2)
-
-        return self.price
-
     class Meta:
         verbose_name_plural = "Gold"
+
+    def save(self, *args, **kwargs):
+        if getattr(self, 'price', True):
+            if "," in str(self.price):
+                new_value = float(str(self.price).replace(",", ""))
+            else:
+                new_value = self.price
+
+            if float(new_value) < 1:
+                self.price = "%.2f" % round(1 / float(new_value), 2)
+        super(Gold, self).save(*args, **kwargs)
 
 
 class Euro(models.Model):

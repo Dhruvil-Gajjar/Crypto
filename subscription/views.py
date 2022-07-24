@@ -219,10 +219,13 @@ def manage_product(request, uid=None):
 
 
 @login_required
-def cancel_subscription(request):
-    stripe.Subscription.modify(
-        'sub_49ty4767H20z6a',
+def cancel_subscription(request, sub_id):
+    OrderDetail.objects.filter(stripeSubscriptionId=sub_id).update(is_canceled=True)
+
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    sub_info = stripe.Subscription.modify(
+        sub_id,
         cancel_at_period_end=True
     )
 
-
+    return redirect('my_subscriptions')
